@@ -254,19 +254,6 @@
                 <appendAssemblyId>false</appendAssemblyId>
               </configuration>
             </execution>
-            <execution>
-              <id>make-resources-assembly</id>
-              <phase>package</phase>
-              <goals>
-                <goal>single</goal>
-              </goals>
-              <configuration>
-                <descriptors>
-                  <descriptor>src/main/assembly/resources.xml</descriptor>
-                </descriptors>
-                <appendAssemblyId>true</appendAssemblyId>
-              </configuration>
-            </execution>
           </executions>
           <inherited>true</inherited>
         </plugin>
