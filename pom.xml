@@ -269,7 +269,26 @@
             <source>1.8</source>
             <detectLinks>false</detectLinks>
             <links>
-              <link>https://commons.apache.org/proper/commons-lang/javadocs/api-${commons-lang3.version}/</link>
+              <!-- For all dependencies defined above. 
+                   Do not end with forward slash as it can cause issues
+                   finding the links. -->
+
+              <!-- Norconex dependencies -->                   
+              <link>https://www.norconex.com/product/commons-lang/apidocs</link>
+
+              <!-- Regular dependencies -->
+              <link>https://commons.apache.org/proper/commons-lang/javadocs/api-${commons-lang3.version}</link>
+              <link>https://commons.apache.org/proper/commons-collections/javadocs/api-${commons-collections4.version}</link>
+              <link>https://commons.apache.org/proper/commons-text/javadocs/api-${commons-text.version}</link>
+              <link>https://commons.apache.org/proper/commons-cli/javadocs/api-release</link>
+              <link>https://velocity.apache.org/engine/${velocity-engine.version}/apidocs</link>
+              <link>https://www.slf4j.org/apidocs</link>
+              <!-- Missing: xerces (1.1 schema), json  -->
+
+              <!-- Test dependencies -->
+              <link>https://junit.org/junit5/docs/${junit-jupiter.version}/api</link>
+              <link>https://logging.apache.org/log4j/2.x/log4j-api/apidocs</link>
+              <link>https://ant.apache.org/manual/api</link>
             </links>
           </configuration>
           <executions>
@@ -425,20 +444,10 @@
       </plugins>
     </pluginManagement>
 
-    <!-- Plugins all children should get.  -->
+    <!-- Plugins all children should get.
     <plugins>
-    
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-      </plugin>
-
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>license-maven-plugin</artifactId>
-      </plugin>      
-
     </plugins>
+     -->
 
   </build>
 
