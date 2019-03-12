@@ -1,0 +1,23 @@
+/*
+Norconex Javadoc CSS
+*/
+
+.skipNav {
+    position:absolute;
+    top:auto;
+    left:-9999px;
+    overflow:hidden;
+}
+#navbarActions a.btn-primary {
+    border: 1px solid #ddddff;
+}
+
+    /*
+
+    border: 1px solid #0062cc;
+    Xfilter: brightness(105%);
+
+    #0062cc;
+    #0069d9
+    opacity: 0.75px;
+    */

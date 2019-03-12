@@ -24,9 +24,13 @@
   <name>Norconex Commons Maven Parent</name>
 
   <properties>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>  
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <!-- 
     <site.baseurl/>
+     -->
 
     <!-- Norconex dependencies -->
     <norconex-commons-lang.version>2.0.0-SNAPSHOT</norconex-commons-lang.version>
@@ -224,13 +228,44 @@
     <pluginManagement>
       <plugins>
 
+        <!-- This is only required to avoid false warnings in Eclipse:
+             https://stackoverflow.com/questions/23908837/
+             apache-camel-maven-remote-resources-plugin-goal-process-is-
+             ignored-by-m2e
+           -->
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-remote-resources-plugin</artifactId>
+                    <versionRange>[1.0,)</versionRange>
+                    <goals>
+                        <goal>process</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore>
+                    </ignore>
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.8.0</version>
           <configuration>
-            <source>1.8</source>
-            <target>1.8</target>
+            <source>${maven.compiler.source}</source>
+            <target>${maven.compiler.target}</target>
             <encoding>UTF-8</encoding>
           </configuration>
           <inherited>true</inherited>
@@ -257,21 +292,84 @@
           </executions>
           <inherited>true</inherited>
         </plugin>
+<!-- 
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-remote-resources-plugin</artifactId>
+          <version>1.6.0</version>
+          <executions>
+            <execution>
+              <id>process-remote-resources</id>
+              <goals>
+                <goal>process</goal>
+              </goals>
+              <configuration>
+                <resourceBundles>
+                  <resourceBundle>com.norconex.commons:javadoc-resources:${project.parent.version}</resourceBundle>
+                </resourceBundles>
+              </configuration>
+            </execution>
+          </executions>
+          <inherited>true</inherited>
+        </plugin>
+ -->
 
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>3.0.1</version>
           <configuration>
-            <overview>${basedir}/src/main/javadoc/overview.html</overview>
+            <reportOutputDirectory>${project.build.directory}</reportOutputDirectory>
+            <outputDirectory>${project.build.directory}</outputDirectory>
+            <stylesheetfile>${project.build.directory}/apidocs/bootstrap.min.css</stylesheetfile>
+            <resourcesArtifacts>
+              <resourcesArtifact>
+                <groupId>com.norconex.commons</groupId>
+                <artifactId>javadoc-resources</artifactId>
+                <version>${project.parent.version}</version>
+              </resourcesArtifact>
+            </resourcesArtifacts>
+            <additionalJOptions>
+                <additionalJOption>&#45;&#45;allow-script-in-comments</additionalJOption>
+            </additionalJOptions>
+            <overview>src/main/javadoc/overview.html</overview>
+            <packagesheader>${project.name} API</packagesheader>
+            <top><![CDATA[
+              <script src="{@docRoot}/jquery-3.3.1.min.js" type="text/javascript"></script>
+              <script src="{@docRoot}/bootstrap.bundle.min.js" type="text/javascript"></script>
+              <script src="{@docRoot}/norconex-javadoc.js" type="text/javascript"></script>
+              <link href="{@docRoot}/norconex-javadoc.css" rel="stylesheet" type="text/css">
+            ]]>
+            </top>
+            <header><![CDATA[
+              <div id="pom" class="d-none"
+                   data-doc-root="{@docRoot}"
+                   data-project-name="${project.name}"
+                   data-project-url="${project.url}"
+                   data-project-version="${project.version}"></div>
+                   <!--
+              <div class="siteLink" style="text-align: right;">
+                <span style="font-size: 1.33em;"><a href="${project.url}">${project.name}</a></span><br>
+                <span>${project.version}</span>
+              </div>
+                 -->
+            ]]>
+            </header>
+            <footer><![CDATA[
+              <a style="font-size: 1.4em;" href="${project.issueManagement.url}">Submit an Issue</a>
+              &nbsp;&nbsp;|&nbsp;&nbsp; 
+              <a style="font-size: 1.4em;" href="https://www.norconex.com">norconex.com</a>
+            ]]>
+            </footer>
             <show>protected</show>
             <nodeprecated>false</nodeprecated>
-            <source>1.8</source>
+            <source>${maven.compiler.source}</source>
             <detectLinks>false</detectLinks>
             <links>
               <!-- For all dependencies defined above. 
                    Do not end with forward slash as it can cause issues
-                   finding the links. -->
+                   finding the links.
+                -->
 
               <!-- Norconex dependencies -->                   
               <link>https://www.norconex.com/product/commons-lang/apidocs</link>
@@ -279,11 +377,11 @@
               <!-- Regular dependencies -->
               <link>https://commons.apache.org/proper/commons-lang/javadocs/api-${commons-lang3.version}</link>
               <link>https://commons.apache.org/proper/commons-collections/javadocs/api-${commons-collections4.version}</link>
-              <link>https://commons.apache.org/proper/commons-text/javadocs/api-${commons-text.version}</link>
+              <!--link>https://commons.apache.org/proper/commons-text/javadocs/api-${commons-text.version}</link-->
               <link>https://commons.apache.org/proper/commons-cli/javadocs/api-release</link>
               <link>https://velocity.apache.org/engine/${velocity-engine.version}/apidocs</link>
               <link>https://www.slf4j.org/apidocs</link>
-              <!-- Missing: xerces (1.1 schema), json  -->
+              <!-- Missing: xerces (1.1 schema), json, commons-text --> 
 
               <!-- Test dependencies -->
               <link>https://junit.org/junit5/docs/${junit-jupiter.version}/api</link>
@@ -349,6 +447,7 @@
           <inherited>true</inherited>
         </plugin>
 
+        <!-- https://www.mojohaus.org/license-maven-plugin/ -->
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
           <artifactId>license-maven-plugin</artifactId>
@@ -359,7 +458,9 @@
               <goals>
                 <goal>download-licenses</goal>
               </goals>
+              <phase>generate-resources</phase>
             </execution>
+            <!-- NOT NEEDED: listing available in licenses.xml sufficient?
             <execution>
               <id>create-license-list</id>
               <goals>
@@ -367,6 +468,7 @@
               </goals>
               <phase>generate-resources</phase>
             </execution>
+             -->
           </executions>
           <inherited>true</inherited>
         </plugin>
@@ -583,4 +685,7 @@
   </contributors>
 
   <description>Maven parent POM for many Norconex Maven projects.</description>
+  <modules>
+    <module>javadoc-resources</module>
+  </modules>
 </project>
