@@ -1,13 +1,43 @@
 /*
-Norconex Javadoc CSS
-*/
+ * Norconex JavaDoc CSS
+ */
 
+
+#detailsPanel > h3,
+#summaryPanel > h3 {
+   font-size: 1.1rem;
+   font-weight: bold;
+}
 .skipNav {
     position:absolute;
     top:auto;
     left:-9999px;
     overflow:hidden;
 }
+
 #navbarActions a.btn-primary {
     border: 1px solid #ddddff;
+}
+
+#classDetails ul.inheritance li ul.inheritance:before {
+    content: '\f105';
+    font-weight: bold;
+    font-family: "Font Awesome 5 Free";
+}
+#classDetails ul.inheritance {
+    margin:0;
+    padding:0;
+    display: inline;
+}
+#classDetails ul.inheritance li {
+    display:inline;
+    list-style:none;
+}
+#classDetails {
+    font-size: 0.9em;
+}
+
+#classDesc pre {
+    font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
+    color: #e83e8c;
 }

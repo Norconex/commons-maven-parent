@@ -1,3 +1,7 @@
+/*
+ * Norconex JavaDoc JavaScript
+ */
+
 // Google Analytics
 if (location.href.indexOf('norconex.com') != -1) {
   var _gaq = _gaq || [];
@@ -25,7 +29,10 @@ $( document ).ready(function() {
     
     doTopNavBar();
     doHeader();
-    doContentContainer();
+    doContentContainerClass();
+    doContentContainerSummary();
+    doContentContainerDetails();
+    doFinalize();
     
     $('.toast').toast();
 });
@@ -55,7 +62,7 @@ function doTopNavBar() {
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul id="navbarActions" class="navbar-nav ml-auto">
               <li class="nav-item dropdown">
-                <a class="btn btn-sm py-1 my-2 mx-2 btn-primary text-light nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="btn btn-sm py-1 my-2 btn-primary text-light nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   View
                 </a>
                 <div id="navigateDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -63,7 +70,7 @@ function doTopNavBar() {
               </li>
 
               <li class="nav-item dropdown">
-                <a class="btn btn-sm py-1 my-2 mx-2 btn-primary text-light nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <a class="btn btn-sm py-1 my-2 ml-3 btn-primary text-light nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Jump To
                 </a>
                 <div id="jumpToDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -74,12 +81,12 @@ function doTopNavBar() {
               </li>
 
               <li id="navbarFrames" class="nav-item">
-                <div class="btn-group btn-group-sm py-1 my-1 mx-2 text-nowrap" role="group" aria-label="Frames or no frames">
+                <div class="btn-group btn-group-sm py-1 my-1 ml-3 text-nowrap" role="group" aria-label="Frames or no frames">
                 </div>
               </li>
 
               <li id="navbarPrevNext" class="nav-item">
-                <div class="btn-group btn-group-sm py-1 my-1 mx-2 text-nowrap" role="group" aria-label="Previous or next class">
+                <div class="btn-group btn-group-sm py-1 my-1 ml-3 text-nowrap" role="group" aria-label="Previous or next class">
                 </div>
               </li>
             </ul>
@@ -174,6 +181,9 @@ function doTopNavBar() {
           }
       });
       $('body > .subNav').remove();
+      
+      $('#jumpToDropdown > a:contains("Constr")').text('Constructor');
+      
 }
 
 //==============================================================================
@@ -268,31 +278,129 @@ function doHeader() {
         $('#copyToast > .toast-body').text(toastBody);
         $('#copyToast').toast('show');
     });
-}
-
-//==============================================================================
-// CONTENT CONTAINER
-//==============================================================================
-function doContentContainer() {
-    $('body > .contentContainer').addClass('container-fluid');
-    $('body > .contentContainer > .description > ul > li div.block').attr(
-            'id', 'classDoc');
-
-    // either this:
-    $(`<div class="card bg-light border-dark">
-         <!--<div class="card-header">Class Documentation</div>-->
-         <div id="classDocContainer" class="card-body text-dark">
-         </div>
-       </div>`).prependTo('body > .contentContainer');
-    $('#classDoc').prependTo('#classDocContainer');
-
-    // or this:
-//    $('#classDoc').prependTo('body > .contentContainer');
-
     
-    //test:
-    //$('h1').appendTo('.card-header');
+    //$('<hr>').insertAfter($('body > .header'));
+    $('body > .header').addClass('bg-light pb-2 mb-2 border-bottom');
 }
+
+//==============================================================================
+// CONTENT: CLASS
+//==============================================================================
+function doContentContainerClass() {
+    var content = $('body > .contentContainer');
+    $(content).addClass('container-fluid');
+    $(content).find('> .description > ul > li div.block').attr('id', 'classDesc');
+
+    //--- Class description: ---
+    $(`<div id="classPanel" class="text-justify pl-3">
+       </div>`).prependTo(content);
+    $('#classDesc').appendTo('#classPanel');
+    
+    //--- Class details: ---
+    $(`<div class="card bg-light my-3">
+         <dl id="classDetails" class="card-body row py-2 my-0">
+         </dl>
+       </div>`).appendTo('#classPanel');;
+
+    // Class signature
+    var classSign = $(content).find('> .description > ul > li > pre').html();
+    if (classSign) {
+        $('<dt/>').text('Class Signature:').appendTo('#classDetails');
+        $('<dd/>').append(classSign).appendTo('#classDetails');
+    }
+
+    // Type hierarchy
+    var typeHier = $(content).find('> .inheritance');
+    if (typeHier) {
+        $('<dt/>').text('Type Hierarchy:').appendTo('#classDetails');
+        $('<dd/>').append(typeHier).appendTo('#classDetails');
+    }
+    
+    // Other details
+    var otherDetails = $(content).find('> .description > ul > li > dl > *');
+    if (otherDetails) {
+        $(otherDetails).appendTo('#classDetails');
+    }
+    $('#classDetails').find('code').contents().unwrap();
+    $('#classDetails').find('> dt:contains("All Implemented Interfaces:")')
+            .text('Impl. Interfaces:')
+            .attr('title', 'All Implemented Interfaces:');
+    $('#classDetails').addClass('text-left');
+    $('#classDetails > dt').addClass('col-md-3 col-lg-2');
+    $('#classDetails > dd').addClass('col-md-9 col-lg-10');
+
+    $(content).find('> .description').remove();
+}
+
+//==============================================================================
+// CONTENT: SUMMARY
+//==============================================================================
+function doContentContainerSummary() {
+    $('body > .contentContainer > .summary').attr('id', 'summaryPanel');
+    var summary = $('#summaryPanel'); 
+    $(summary).find('ul.blockList, ul.blockListLast, li.blockList').contents().unwrap();
+    
+    $(summary).find('> table.memberSummary').each(function() {
+        $(this).wrap($('<div>').addClass('pl-3'));
+        $(this).addClass('table border');
+        var tbody = $(this).find('> tbody');
+        $(tbody).find('> tr:first-child').wrap('<thead>');
+        $(tbody).find('> thead').insertBefore(tbody);
+        $(this).find('> thead').addClass('thead-light');
+        $(this).find('> caption').remove();
+    });
+
+    // Constructor Summary
+    $('h3:contains("Constructor Summary")').attr('id', 'constrSummary');
+    renameElement($('#constrSummary'), 'h2');
+
+    // Method Summary
+    $('h3:contains("Method Summary")').attr('id', 'methodSummary');
+    renameElement($('#methodSummary'), 'h2');
+    
+    $(summary).find('> code').wrap('<div class="codePanel">');
+    $(summary).find('> .codePanel').addClass("ml-3 mb-3 pl-2 py-2 border");
+
+    $(summary).find('> h2').addClass('bg-dark text-light pl-2 pb-1');
+    $(summary).find('> h3').addClass('bg-light border text-dark pl-2 py-2 ml-3 mb-0');
+}
+
+//==============================================================================
+// CONTENT: DETAILS
+//==============================================================================
+function doContentContainerDetails() {
+    $('body > .contentContainer > .details').attr('id', 'detailsPanel');
+    var details = $('#detailsPanel'); 
+    
+    $(details).find('> ul > li > ul > li > ul > li').each(function() {
+        $(this).removeClass('blockList');
+        $(this).addClass('detailPanel');
+        renameElement($(this), 'div');
+    });
+
+    $(details).find('ul.blockList, ul.blockListLast, li.blockList').contents().unwrap();
+    $(details).find('> h3').each(function() {
+        renameElement($(this), 'h2');
+    });
+    
+    $(details).find('> .detailPanel > h4').each(function() {
+        $(this).insertBefore($(this).parent());
+    })
+    $(details).find('> h4').each(function() {
+        renameElement($(this), 'h3');
+    });
+    $(details).find('> .detailPanel').addClass("ml-3 mb-3 pl-2 pt-2 pb-0 border");
+
+    $(details).find('> h2').addClass('bg-dark text-light pl-2 pb-1');
+    $(details).find('> h3').addClass('bg-light border text-dark pl-2 py-2 ml-3 mb-0');
+}
+
+//==============================================================================
+// FINALIZE
+//==============================================================================
+function doFinalize() {
+}
+
 
 //==============================================================================
 // UTILITIES
@@ -313,10 +421,3 @@ function copyToClipboard(text) {
     $temp.remove();
 }
 
-//TODO add a copy-to-clipboard button next to class for ease of copying
-// in config file.
-
-//TODO maybe offer a button that copies the link as HTML link or markdown link
-// for easy cutnpaste
-
-//TODO offer the above two todo as a dropdown of options next to class name
