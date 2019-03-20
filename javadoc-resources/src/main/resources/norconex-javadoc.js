@@ -393,6 +393,11 @@ function doContentContainerDetails() {
 
     $(details).find('> h2').addClass('bg-dark text-light pl-2 pb-1');
     $(details).find('> h3').addClass('bg-light border text-dark pl-2 py-2 ml-3 mb-0');
+    
+    // method signature on one line
+    $(details).find('> .detailPanel > pre').each(function() {
+        $(this).html($(this).html().replace(/\s+/gm, ' '));
+    });
 }
 
 //==============================================================================

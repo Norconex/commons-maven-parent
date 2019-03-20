@@ -39,5 +39,18 @@
 
 #classDesc pre {
     font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
-    color: #e83e8c;
+    /* color: #e83e8c; */
+    color: #00aa00;
+}
+
+body > .contentContainer code {
+    color: #00aa00;
+}
+
+body > .contentContainer .detailPanel > pre {
+    font-weight: bold;
+}
+
+body > .contentContainer .detailPanel > pre + div.block {
+    margin-bottom: 1rem;
 }
