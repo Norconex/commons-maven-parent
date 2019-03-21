@@ -321,7 +321,7 @@
           <configuration>
             <reportOutputDirectory>${project.build.directory}</reportOutputDirectory>
             <outputDirectory>${project.build.directory}</outputDirectory>
-            <stylesheetfile>${project.build.directory}/apidocs/bootstrap.min.css</stylesheetfile>
+            <stylesheetfile>${project.build.directory}/apidocs/norconex-javadoc.css</stylesheetfile>
             <resourcesArtifacts>
               <resourcesArtifact>
                 <groupId>com.norconex.commons</groupId>
@@ -338,8 +338,8 @@
               <script src="{@docRoot}/jquery-3.3.1.min.js" type="text/javascript"></script>
               <script src="{@docRoot}/bootstrap.bundle.min.js" type="text/javascript"></script>
               <script src="{@docRoot}/norconex-javadoc.js" type="text/javascript"></script>
+              <link href="{@docRoot}/bootstrap.min.css" rel="stylesheet" type="text/css">
               <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-              <link href="{@docRoot}/norconex-javadoc.css" rel="stylesheet" type="text/css">
             ]]>
             </top>
             <header><![CDATA[

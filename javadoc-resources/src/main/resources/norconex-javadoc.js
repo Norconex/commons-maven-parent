@@ -32,7 +32,6 @@ $( document ).ready(function() {
     doContentContainerClass();
     doContentContainerSummary();
     doContentContainerDetails();
-    doFinalize();
     
     $('.toast').toast();
 });
@@ -202,9 +201,11 @@ function doHeader() {
     // class name:
     var elTitle = $('body > .header > h2')
     $(elTitle).addClass('text-secondary');
-    $(elTitle).html($(elTitle).html().replace(
-            /^(Class)\s+(.*?)(&lt;.*|$)/,
-            '$1: <span id="className" class="text-body">$2</span>$3'));
+    if ($(elTitle).html()) {
+        $(elTitle).html($(elTitle).html().replace(
+                /^(Class)\s+(.*?)(&lt;.*|$)/,
+                '$1: <span id="className" class="text-body">$2</span>$3'));
+    }
     renameElement($(elTitle), 'h1');
     var className = $('#className').text();
     var defaultCopyType = localStorage.dropdownCopy;
@@ -401,20 +402,13 @@ function doContentContainerDetails() {
 }
 
 //==============================================================================
-// FINALIZE
-//==============================================================================
-function doFinalize() {
-}
-
-
-//==============================================================================
 // UTILITIES
 //==============================================================================
 function renameElement(element, newName) {
-    if (element) {
+    if (element && $(element).get(0) && $(element).get(0).outerHTML) {
         var newElement = $(element).get(0).outerHTML
-                .replace(/^<\w+/, '<' + newName)
-                .replace(/<\/\w+>$/, '</' + newName + '>');
+            .replace(/^<\w+/, '<' + newName)
+            .replace(/<\/\w+>$/, '</' + newName + '>');
         $(element).replaceWith(newElement);
     }
 }
