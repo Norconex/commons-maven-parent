@@ -3,6 +3,154 @@
  */
 
 
+/*
+================================================================================
+   FRAMES: ALL
+================================================================================
+*/
+body {
+    margin: 0px;
+}
+
+
+/*
+================================================================================
+   FRAMES: PACKAGES and CLASSES
+================================================================================
+*/
+
+/* Default font family and padding */
+body > h1.bar,
+body > .indexHeader,
+body > .indexContainer {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+/* Links style */
+body > h1.bar a,
+body > .indexHeader a,
+body > .indexContainer a {
+    color: #007bff;
+    text-decoration: none;
+    background-color: transparent;
+}
+body > h1.bar a:hover,
+body > .indexHeader a:hover,
+body > .indexContainer a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
+/* List style */
+body > .indexContainer > ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+body > .indexContainer > ul > li {
+    white-space: nowrap;
+}
+
+/* Headings */
+body > h1.bar {
+    box-sizing: border-box;
+    font-size: 1.0rem !important;
+    line-height: 1.2;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    font-weight: normal;
+    margin: 0px;
+}
+body > .indexContainer h2 {
+    display: none;
+}
+
+/* Content */
+body > .indexHeader,
+body > .indexContainer {
+    font-size: 0.8em;
+}
+
+
+/*
+================================================================================
+   FRAME: PACKAGES
+================================================================================
+Base selectors:
+   body > .indexHeader span a[target="packageFrame"]   // heading
+   body > .indexHeader + .indexContainer               // content
+*/
+
+/* All Classes icon */
+body > .indexHeader span a[target="packageFrame"]:before {
+    content: url('bullet-packages.png');
+    position: relative;
+    padding-right: 2px;
+    top: 3px;
+}
+
+/* Package icon */
+body > .indexHeader + .indexContainer > ul[title="Packages"] li:before {
+    content: url('bullet-package.gif');
+    position: relative;
+    padding-right: 2px;
+    top: 3px;
+}
+
+
+/*
+================================================================================
+   FRAME: CLASSES
+================================================================================
+Base selectors:
+   body > h1.bar > a[target="classFrame"]      // heading
+   body > h1.bar + .indexContainer               // content
+*/
+
+/* Heading bar */
+body > h1.bar > a[target="classFrame"] {
+    white-space: nowrap;
+}
+body > h1.bar > a[target="classFrame"]:before {
+    content: url('bullet-package.gif');
+    position: relative;
+    padding-right: 2px;
+    top: 3px;
+}
+
+/* Class icon */
+body > h1.bar + .indexContainer > ul li:before {
+    content: url('bullet-class.gif');
+    position: relative;
+    padding-right: 2px;
+    top: 3px;
+}
+/* Interface icon */
+body > h1.bar + .indexContainer > ul > li span.interfaceName {
+    margin-left: -17px; 
+}
+body > h1.bar + .indexContainer > ul > li span.interfaceName:before {
+    content: url('bullet-interface.gif');
+    position: relative;
+    padding-right: 2px;
+    top: 5px;
+}
+
+
+/*
+================================================================================
+   FRAME: MAIN
+================================================================================
+Base selectors:
+    body > .header                // header
+    body > .contentContainer      // content
+*/
+
+
 #detailsPanel > h3,
 #summaryPanel > h3 {
    font-size: 1.1rem;
@@ -40,90 +188,19 @@
 #classDesc pre {
     font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
     /* color: #e83e8c; */
-    color: #00aa00;
+    /* color: #00aa00; */
+    color: #408080;
 }
 
 body > .contentContainer code {
-    color: #00aa00;
+    /* color: #00aa00; */
+    color: #408080;
 }
 body > .contentContainer .detailPanel > pre {
+    color: #408080;
     font-weight: bold;
 }
 body > .contentContainer .detailPanel > pre + div.block {
     margin-bottom: 1rem;
 }
 
-body {
-    margin: 0px;
-}
-
-/* Left-side frames */
-
-body > h1.bar,
-body > .indexHeader,
-body > .indexContainer {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-    padding-left: 5px;
-    padding-right: 5px;
-    font-size: 0.8em;
-}
-
-body > h1.bar,
-body > .indexContainer h2 {
-    box-sizing: border-box;
-    display: block;
-    padding-top: 3px;
-    padding-bottom: 3px;
-    font-weight: normal;
-}
-body > h1.bar {
-    font-size: 1.0rem !important;
-    color: #fff !important;
-    line-height: 1.2;
-    background-color: #007bff !important;
-    border-bottom: 1px solid #dee2e6 !important;
-    margin: 0px; 
-}
-body > .indexContainer h2 {
-    font-size: 1.0rem !important;
-    color: #212529 !important;
-    line-height: 1.2;
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
-
-body > .indexContainer > ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-}
-body > .indexContainer > ul > li {
-    white-space: nowrap;
-}
-
-/* Package icon */
-body > .indexContainer > ul:not(:first-child) li:before {
-    content: url('bullet-package.gif');
-    position: relative;
-    top: 3px;
-}
-/* Class icon */
-body > .indexContainer > ul:first-child li:before {
-    content: url('bullet-class.gif');
-    position: relative;
-    top: 3px;
-}
-/* Interface icon */
-body > .indexContainer > ul:first-child > li span.interfaceName {
-    margin-left: -15px; 
-}
-body > .indexContainer > ul:first-child > li span.interfaceName:before {
-   content: url('bullet-interface.gif');
-   position: relative;
-   top: 5px;
-}
-
-
-/*
-<li><a href="com/norconex/commons/lang/io/ICachedStream.html" title="interface in com.norconex.commons.lang.io" target="classFrame"><span class="interfaceName">ICachedStream</span></a></li>
-*/

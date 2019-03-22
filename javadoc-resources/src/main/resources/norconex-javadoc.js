@@ -16,7 +16,7 @@ if (location.href.indexOf('norconex.com') != -1) {
 }
 
 // Re-order and modify elements for enhanced display
-var pageURL = window.location.href;
+var pageURL = window.location.href.replace(/\#$/, '');
 var isInFrame =  self != top;
 var pom = {};
 
@@ -106,6 +106,7 @@ function doTopNavBar() {
               var cls = 'disabled';
               if ($(this).hasClass("navBarCell1Rev")) {
                   cls = 'active';
+                  $('body').attr('id', 'page' + $(this).text());
               }
               item = $('<a href="#" class="' + cls + '">' + $(this).text() + '</a>');
           }
@@ -195,19 +196,21 @@ function doHeader() {
     var elSubTitle = $('body > .header > .subTitle');
     var packageName = $(elSubTitle).text();
     $(elSubTitle).empty();
-    $(elSubTitle).append('<span class="text-secondary">Package: </span>');
     $(elSubTitle).append('<span id="packageName">' + packageName + '</span>');
     
     // class name:
     var elTitle = $('body > .header > h2')
-    $(elTitle).addClass('text-secondary');
-    if ($(elTitle).html()) {
-        $(elTitle).html($(elTitle).html().replace(
-                /^(Class)\s+(.*?)(&lt;.*|$)/,
-                '$1: <span id="className" class="text-body">$2</span>$3'));
+    if ($(elTitle).html() && $('body').attr('id') == 'pageClass') {
+        $(elTitle).html($(elTitle).html().replace(/^Class\s+/, ''));
+        var className = $(elTitle).text();
+        renameElement($(elTitle), 'h1');
+        addCopyButtonToHeader(packageName, className);
     }
-    renameElement($(elTitle), 'h1');
-    var className = $('#className').text();
+    
+    $('body > .header').addClass('bg-light pb-0 mb-2 border-bottom');
+}
+
+function addCopyButtonToHeader(packageName, className) {
     var defaultCopyType = localStorage.dropdownCopy;
     if (!defaultCopyType) {
         defaultCopyType = 'copy-full';
@@ -233,16 +236,16 @@ function doHeader() {
     $('#' + defaultCopyType).addClass('active');
 
     // Copy notif.
-    $(`<div id="copyToast" class="toast border border-info" data-delay="2000"
+    $(`<div id="copyToast" class="toast border border-dark" data-delay="2000"
         style="position: absolute; top: 50px; right: 10px; z-index: 2000;">
-      <div class="toast-header text-info">
+      <div class="toast-header text-dark">
         <i class="fas fa-clipboard"></i>&nbsp;
         <strong class="mr-auto">Copied!</strong>
         <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="toast-body text-info">
+      <div class="toast-body text-secondary">
         Successfully copied.
       </div>
     </div>`).appendTo('body');
@@ -260,12 +263,12 @@ function doHeader() {
             text = className;
             toastBody = 'Class short name copied.';
         } else if (copyType === 'copy-html') {
-            text = '<a href="' + window.location.href
+            text = '<a href="' + pageURL
                  + '" title="Link to ' + className + ' class documentation">'
                  + className + '</a>';
              toastBody = 'Class copied as an HTML link.';
         } else if (copyType === 'copy-md') {
-            text = '(' + className + ')[' + window.location.href + ']';
+            text = '(' + className + ')[' + pageURL + ']';
             toastBody = 'Class copied as a Markdown link.';
         } else { // copy-full
             text = packageName + '.' + className;
@@ -279,9 +282,6 @@ function doHeader() {
         $('#copyToast > .toast-body').text(toastBody);
         $('#copyToast').toast('show');
     });
-    
-    //$('<hr>').insertAfter($('body > .header'));
-    $('body > .header').addClass('bg-light pb-2 mb-2 border-bottom');
 }
 
 //==============================================================================
@@ -298,8 +298,9 @@ function doContentContainerClass() {
     $('#classDesc').appendTo('#classPanel');
     
     //--- Class details: ---
-    $(`<div class="card bg-light my-3">
-         <dl id="classDetails" class="card-body row py-2 my-0">
+    $(`<hr>
+       <div class="Xcard Xbg-light my-3">
+         <dl id="classDetails" class="Xcard-body row py-2 my-0">
          </dl>
        </div>`).appendTo('#classPanel');;
 
