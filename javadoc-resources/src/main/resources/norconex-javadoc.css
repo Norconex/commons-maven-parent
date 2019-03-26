@@ -2,6 +2,17 @@
  * Norconex JavaDoc CSS
  */
 
+:root {
+  --icon-annotation: url('bullet-annotation.png');
+  --icon-class: url('bullet-class.png');
+  --icon-enum: url('bullet-enum.png');
+  --icon-exception: url('bullet-exception.png');
+  --icon-interface: url('bullet-interface.png');
+  --icon-method: url('bullet-method.png');
+  --icon-package: url('bullet-package.png');
+  --icon-packages: url('bullet-packages.png');
+}
+
 
 /*
 ================================================================================
@@ -87,7 +98,7 @@ Base selectors:
 
 /* All Classes icon */
 body > .indexHeader span a[target="packageFrame"]:before {
-    content: url('bullet-packages.png');
+    content: var(--icon-packages);
     position: relative;
     padding-right: 2px;
     top: 3px;
@@ -95,7 +106,7 @@ body > .indexHeader span a[target="packageFrame"]:before {
 
 /* Package icon */
 body > .indexHeader + .indexContainer > ul[title="Packages"] li:before {
-    content: url('bullet-package.gif');
+    content: var(--icon-package);
     position: relative;
     padding-right: 2px;
     top: 3px;
@@ -116,28 +127,32 @@ body > h1.bar > a[target="classFrame"] {
     white-space: nowrap;
 }
 body > h1.bar > a[target="classFrame"]:before {
-    content: url('bullet-package.gif');
+    content: var(--icon-package);
     position: relative;
     padding-right: 2px;
     top: 3px;
 }
 
 /* Class icon */
-body > h1.bar + .indexContainer > ul li:before {
-    content: url('bullet-class.gif');
+body > h1.bar + .indexContainer > ul li a[title^="class in"]:before {
+    content: var(--icon-class);
     position: relative;
     padding-right: 2px;
     top: 3px;
 }
 /* Interface icon */
-body > h1.bar + .indexContainer > ul > li span.interfaceName {
-    margin-left: -17px; 
-}
-body > h1.bar + .indexContainer > ul > li span.interfaceName:before {
-    content: url('bullet-interface.gif');
+body > h1.bar + .indexContainer > ul li a[title^="interface in"]:before {
+    content: var(--icon-interface);
     position: relative;
     padding-right: 2px;
-    top: 5px;
+    top: 3px;
+}
+/* Enum icon */
+body > h1.bar + .indexContainer > ul li a[title^="enum in"]:before {
+    content: var(--icon-enum);
+    position: relative;
+    padding-right: 2px;
+    top: 3px;
 }
 
 
@@ -203,4 +218,96 @@ body > .contentContainer .detailPanel > pre {
 body > .contentContainer .detailPanel > pre + div.block {
     margin-bottom: 1rem;
 }
+
+table caption {
+    caption-side: top;
+}
+
+/* Overview Package icon */
+table.overviewSummary tbody td > a:before {
+    content: var(--icon-package);
+    position: relative;
+    padding-right: 2px;
+    top: 3px;
+}
+
+table th.colFirst,
+table td.colFirst {
+    width: 25%;
+}
+
+body > .header > h1 > .titleHeading {
+    font-size: 1.4rem;
+}
+
+#pageTree .contentContainer {
+    font-size: 0.9em;
+}
+#pageDeprecated ul,
+#pageTree ul {
+    list-style: none;
+    padding-left: 1rem;
+}
+#pageDeprecated ul li,
+#pageTree ul li {
+    list-style: none;
+    padding-left: 0.2rem;
+}
+#pageTree .contentContainer .packageHierarchyLabel + ul li:before {
+    content: var(--icon-package);
+    position: relative;
+    padding-right: 2px;
+    top: 3px;
+}
+#pageTree .contentContainer h2[title="Class Hierarchy"] + ul li:before {
+    content: var(--icon-class);
+    position: relative;
+    padding-right: 2px;
+    top: 3px;
+}
+#pageTree .contentContainer h2[title="Interface Hierarchy"] + ul li:before {
+    content: var(--icon-interface);
+    position: relative;
+    padding-right: 2px;
+    top: 3px;
+}
+#pageTree .contentContainer h2[title="Enum Hierarchy"] + ul li:before {
+    content: var(--icon-enum);
+    position: relative;
+    padding-right: 2px;
+    top: 3px;
+}
+
+#pageDeprecated li a[href="#interface"]:before {
+    content: var(--icon-interface);
+    position: relative;
+    padding-right: 2px;
+    top: 3px;
+}
+#pageDeprecated li a[href="#class"]:before {
+    content: var(--icon-class);
+    position: relative;
+    padding-right: 2px;
+    top: 3px;
+}
+#pageDeprecated li a[href="#enum"]:before {
+    content: var(--icon-enum);
+    position: relative;
+    padding-right: 2px;
+    top: 3px;
+}
+#pageDeprecated li a[href="#method"]:before {
+    content: var(--icon-method);
+    position: relative;
+    padding-right: 2px;
+    top: 3px;
+}
+
+#pageIndex .contentContainer dl {
+    font-size: 0.9rem;
+}
+
+#pageOverview table.overviewSummary td {
+    white-space: nowrap;
+} 
 

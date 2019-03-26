@@ -15,31 +15,59 @@ if (location.href.indexOf('norconex.com') != -1) {
   })();
 }
 
-// Re-order and modify elements for enhanced display
-var pageURL = window.location.href.replace(/\#$/, '');
-var isInFrame =  self != top;
+// Global vars
 var pom = {};
+var page = {};
 
-$( document ).ready(function() {
-    pom.docRoot = $('#pom').data('doc-root');
-    pom.projectName = $('#pom').data('project-name');
-    pom.projectVersion = $('#pom').data('project-version');
-    pom.projectURL = $('#pom').data('project-url');
-    pom.projectShortName = pom.projectName.replace('Norconex ', '');
+$(document).ready(function() {
     
-    doTopNavBar();
-    doHeader();
-    doContentContainerClass();
-    doContentContainerSummary();
-    doContentContainerDetails();
+    initGlobalVars();
+    
+    doForAllPages();
+    
+    // Call page-specific function:
+    eval('doPage' + page.navName + '();');
     
     $('.toast').toast();
 });
 
 //==============================================================================
-// TOP NAV BAR
+// INIT: GLOBAL VARS
 //==============================================================================
-function doTopNavBar() {
+function initGlobalVars() {
+
+    // Values set in Maven POM
+    pom.docRoot = $('#pom').data('doc-root');
+    pom.projectName = $('#pom').data('project-name');
+    pom.projectVersion = $('#pom').data('project-version');
+    pom.projectURL = $('#pom').data('project-url');
+    pom.projectShortName = pom.projectName.replace('Norconex ', '');
+
+    // Page details
+    page.url = window.location.href.replace(/\#$/, '');
+    page.inFrame = self != top;
+    page.navName = $('body > .topNav > .navList > li.navBarCell1Rev').text();
+}
+
+//==============================================================================
+// ALL PAGES
+//==============================================================================
+function doForAllPages() {
+    _doForAllPages_TopNavBar();
+    _doForAllPages_HeadFoot();
+    
+    if (page.navName != 'Use' && page.navName != 'Deprecated') {
+        $('table > caption').remove();
+    }
+    
+    $('body > .contentContainer').addClass('container-fluid');
+    
+    $('.deprecationComment').addClass('text-danger');
+}
+
+// ALL PAGES: Top Nav Bar
+//--------------------------------------
+function _doForAllPages_TopNavBar() {
     var navBar = `
         <nav id="topNav" class="navbar nav-justified navbar-expand-lg navbar-dark bg-primary py-0">
 
@@ -68,7 +96,7 @@ function doTopNavBar() {
                 </div>
               </li>
 
-              <li class="nav-item dropdown">
+              <li id="jumpToDropdownList" class="nav-item dropdown">
                 <a class="btn btn-sm py-1 my-2 ml-3 btn-primary text-light nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Jump To
                 </a>
@@ -116,7 +144,7 @@ function doTopNavBar() {
       $('body > .topNav').remove();
 
       // Insert All classes in between prev/next;
-      if (!isInFrame) {
+      if (!page.inFrame) {
           var item = $('#allclasses_navbar_top > li').children().first();
           $(item).addClass('nav-link btn btn-primary text-light px-3');
           $(item).appendTo('#navbarPrevNext div');
@@ -147,12 +175,12 @@ function doTopNavBar() {
               if ($(item).is('a')) {
                   if (/\?/.test($(item).attr('href'))) {
                       $(item).prepend('<i class="fas fa-columns"></i>&nbsp;');
-                      if (isInFrame) {
+                      if (page.inFrame) {
                           $(item).addClass('active');
                       }
                   } else {
                       $(item).prepend('<i class="far fa-window-maximize"></i>&nbsp;');
-                      if (!isInFrame) {
+                      if (!page.inFrame) {
                           $(item).addClass('active');
                       }
                   }
@@ -162,55 +190,113 @@ function doTopNavBar() {
           }
       });
       
-      // Summary:
-      $('body > .subNav > div > .subNavList:first-child > li').each(function() {
-          var item = $(this).children().first();
-          if ($(item).is('a')) {
-              $(item).addClass('dropdown-item');
-              $(item).insertBefore('#jumpToDropdown .dropdown-divider');
-          }
-      });
-      $('body > .subNav > div > .subNavList:first-child').remove();
+      
+      // Jump to dropdown
+      if (page.navName == 'Class') {
+          // Summary:
+          $('body > .subNav > div > .subNavList:first-child > li').each(function() {
+              var item = $(this).children().first();
+              if ($(item).is('a')) {
+                  $(item).addClass('dropdown-item');
+                  $(item).insertBefore('#jumpToDropdown .dropdown-divider');
+              }
+          });
+          $('body > .subNav > div > .subNavList:first-child').remove();
 
-      // Details:
-      $('body > .subNav > div > .subNavList:first-child > li').each(function() {
-          var item = $(this).children().first();
-          if ($(item).is('a')) {
-              $(item).addClass('dropdown-item');
-              $(item).appendTo('#jumpToDropdown');
-          }
-      });
+          // Details:
+          $('body > .subNav > div > .subNavList:first-child > li').each(function() {
+              var item = $(this).children().first();
+              if ($(item).is('a')) {
+                  $(item).addClass('dropdown-item');
+                  $(item).appendTo('#jumpToDropdown');
+              }
+          });
+
+          $('#jumpToDropdown > a:contains("Constr")').text('Constructor');
+      } else {
+          $('#jumpToDropdownList').remove();
+      }
+
       $('body > .subNav').remove();
-      
-      $('#jumpToDropdown > a:contains("Constr")').text('Constructor');
-      
 }
 
-//==============================================================================
-// HEADER
-//==============================================================================
-function doHeader() {
+// ALL PAGES: Header and Footer
+//--------------------------------------
+function _doForAllPages_HeadFoot() {
     $('body > .header').addClass('container-fluid');
+    $('body > .header:first').addClass('bg-light pb-0 mb-2 border-bottom');
+    
+    $('body > p.legalCopy').addClass('container-fluid p-3 text-center');
+    $('body > p.legalCopy small').addClass('d-inline-block');
+}
 
+
+//==============================================================================
+// PAGE: Overview
+//==============================================================================
+function doPageOverview() {
+    $('body > .header > .subTitle + p').remove();
+    $('body > .header > .subTitle').addClass('my-3');
+    
+    var table = $('table.overviewSummary');
+    
+    $(table).wrap($('<div>').addClass('px-3'));
+    
+    bootstrapTable(table);
+    $(table).addClass('table-sm');
+}
+
+
+//==============================================================================
+// PAGE: Package
+//==============================================================================
+function doPagePackage() {
+    $('body > .header > .docSummary + p').remove();
+    $('body > .header > .docSummary').addClass('pb-2');
+    $('body > .contentContainer').addClass('mt-3');
+    
+    bootstrapTable($('table.typeSummary'));
+    unwrapFromList($('table.typeSummary'));
+    $('table.typeSummary').addClass('table-sm');
+    
+    $('a[name="package.description"] + h2').remove();
+    $('a[name="package.description"] + div').remove();
+
+    $('table.typeSummary td.colLast').each(function () {
+        if (getOwnText(this) == 'Deprecated') {
+            $(this).addClass('text-muted font-weight-bold');
+            $(this).find('.deprecationComment').removeClass('text-danger').addClass('font-weight-normal');
+        }
+    });
+}
+
+
+//==============================================================================
+// PAGE: Class
+//==============================================================================
+
+function doPageClass() {
+    _doPageClass_Header();
+    _doPageClass_Description();
+    _doPageClass_Summary();
+    _doPageClass_Details();
+}
+
+function _doPageClass_Header() {
     // package:
     var elSubTitle = $('body > .header > .subTitle');
     var packageName = $(elSubTitle).text();
     $(elSubTitle).empty();
     $(elSubTitle).append('<span id="packageName">' + packageName + '</span>');
-    
+
     // class name:
     var elTitle = $('body > .header > h2')
-    if ($(elTitle).html() && $('body').attr('id') == 'pageClass') {
+    if ($(elTitle).html()) {
         $(elTitle).html($(elTitle).html().replace(/^Class\s+/, ''));
         var className = $(elTitle).text();
         renameElement($(elTitle), 'h1');
-        addCopyButtonToHeader(packageName, className);
     }
-    
-    $('body > .header').addClass('bg-light pb-0 mb-2 border-bottom');
-}
 
-function addCopyButtonToHeader(packageName, className) {
     var defaultCopyType = localStorage.dropdownCopy;
     if (!defaultCopyType) {
         defaultCopyType = 'copy-full';
@@ -263,12 +349,12 @@ function addCopyButtonToHeader(packageName, className) {
             text = className;
             toastBody = 'Class short name copied.';
         } else if (copyType === 'copy-html') {
-            text = '<a href="' + pageURL
+            text = '<a href="' + page.url
                  + '" title="Link to ' + className + ' class documentation">'
                  + className + '</a>';
              toastBody = 'Class copied as an HTML link.';
         } else if (copyType === 'copy-md') {
-            text = '(' + className + ')[' + pageURL + ']';
+            text = '(' + className + ')[' + page.url + ']';
             toastBody = 'Class copied as a Markdown link.';
         } else { // copy-full
             text = packageName + '.' + className;
@@ -284,12 +370,9 @@ function addCopyButtonToHeader(packageName, className) {
     });
 }
 
-//==============================================================================
-// CONTENT: CLASS
-//==============================================================================
-function doContentContainerClass() {
+function _doPageClass_Description() {
     var content = $('body > .contentContainer');
-    $(content).addClass('container-fluid');
+    
     $(content).find('> .description > ul > li div.block').attr('id', 'classDesc');
 
     //--- Class description: ---
@@ -298,9 +381,8 @@ function doContentContainerClass() {
     $('#classDesc').appendTo('#classPanel');
     
     //--- Class details: ---
-    $(`<hr>
-       <div class="Xcard Xbg-light my-3">
-         <dl id="classDetails" class="Xcard-body row py-2 my-0">
+    $(`<hr><div class="my-3">
+         <dl id="classDetails" class="row py-2 my-0">
          </dl>
        </div>`).appendTo('#classPanel');;
 
@@ -334,10 +416,8 @@ function doContentContainerClass() {
     $(content).find('> .description').remove();
 }
 
-//==============================================================================
-// CONTENT: SUMMARY
-//==============================================================================
-function doContentContainerSummary() {
+function _doPageClass_Summary() {
+
     $('body > .contentContainer > .summary').attr('id', 'summaryPanel');
     var summary = $('#summaryPanel'); 
     $(summary).find('ul.blockList, ul.blockListLast, li.blockList').contents().unwrap();
@@ -349,7 +429,6 @@ function doContentContainerSummary() {
         $(tbody).find('> tr:first-child').wrap('<thead>');
         $(tbody).find('> thead').insertBefore(tbody);
         $(this).find('> thead').addClass('thead-light');
-        $(this).find('> caption').remove();
     });
 
     // Constructor Summary
@@ -365,12 +444,10 @@ function doContentContainerSummary() {
 
     $(summary).find('> h2').addClass('bg-dark text-light pl-2 pb-1');
     $(summary).find('> h3').addClass('bg-light border text-dark pl-2 py-2 ml-3 mb-0');
+    
 }
 
-//==============================================================================
-// CONTENT: DETAILS
-//==============================================================================
-function doContentContainerDetails() {
+function _doPageClass_Details() {
     $('body > .contentContainer > .details').attr('id', 'detailsPanel');
     var details = $('#detailsPanel'); 
     
@@ -402,9 +479,97 @@ function doContentContainerDetails() {
     });
 }
 
+
+//==============================================================================
+// PAGE: Use
+//==============================================================================
+function doPageUse() {
+    $('body > .classUseContainer').addClass('container-fluid');
+    
+    renameElement($('body > .header > h2'), 'h1');
+    var title = $('body > .header > h1.title').html();
+    title = title.replace(/(Uses of Class\s*<br>)/mg, '<div class="titleHeading pt-3 text-muted">$1</div>');
+    $('body > .header > h1.title').html(title);
+
+    var table = $('table.useSummary');
+    bootstrapTable($(table));
+    unwrapFromList($(table));
+    $(table).wrap($('<div>').addClass('px-3'));
+    $(table).addClass('table-sm');
+}
+
+
+//==============================================================================
+// PAGE: Tree
+//==============================================================================
+function doPageTree() {
+    $('body > .header > ul').prependTo($('body > .contentContainer'));
+    $('body > .header > .packageHierarchyLabel').prependTo($('body > .contentContainer'));
+    
+}
+
+
+//==============================================================================
+// PAGE: Deprecated
+//==============================================================================
+function doPageDeprecated() {
+    $('body > .header > ul').prependTo($('body > .contentContainer'));
+    $('body > .header > h2').prependTo($('body > .contentContainer'));
+
+    var table = $('table.deprecatedSummary');
+    bootstrapTable($(table));
+
+}
+
+
+//==============================================================================
+// PAGE: Help
+//==============================================================================
+function doPageHelp() {
+
+}
+
+
+//==============================================================================
+// PAGE: Index
+//==============================================================================
+function doPageIndex() {
+    $('body > .contentContainer > dl > dt').addClass('bg-light border pl-2');
+    $('body > .contentContainer > dl > dd').addClass('border border-top-0 pl-2');
+}
+
+
+
 //==============================================================================
 // UTILITIES
 //==============================================================================
+
+// Gets an element text, without the text of its children
+function getOwnText(el) {
+    return $(el).contents().get(0).nodeValue.trim();
+}
+
+// Remove direct parent(s) that are UL or LI.
+function unwrapFromList(el) {
+    $(el).each(function() {
+        if ($(this).parent('ul,li').length > 0) {
+            $(this).unwrap();
+            unwrapFromList(this);
+        }
+    });
+}
+
+// If more than one tbody and no thead, assume first tbody is thead 
+function bootstrapTable(table) {
+    $(table).each(function() {
+        if ($(this).find('> tbody').length > 1) {
+            renameElement($(this).find('> tbody:first'), 'thead');
+        }
+        $(this).addClass('table border');
+        $(this).find('> thead').addClass('thead-light');
+    });
+} 
+
 function renameElement(element, newName) {
     if (element && $(element).get(0) && $(element).get(0).outerHTML) {
         var newElement = $(element).get(0).outerHTML
@@ -413,6 +578,7 @@ function renameElement(element, newName) {
         $(element).replaceWith(newElement);
     }
 }
+
 function copyToClipboard(text) {
     var $temp = $("<input>");
     $("body").append($temp);
