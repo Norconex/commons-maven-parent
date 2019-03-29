@@ -68,58 +68,49 @@ function doForAllPages() {
 // ALL PAGES: Top Nav Bar
 //--------------------------------------
 function _doForAllPages_TopNavBar() {
-    var navBar = `
-        <nav id="topNav" class="navbar nav-justified navbar-expand-lg navbar-dark bg-primary py-0">
-
-          <a name="navbar.top"></a>
-          <div class="skipNav"><a href="#skip.navbar.top" title="Skip navigation links">Skip navigation links</a></div>
-          <a name="navbar.top.firstrow"></a>
-          
-          <a class="navbar-brand" href="${pom.projectURL}">
-            <img id="imgLogo" src="${pom.docRoot}norconex-logo-white.svg" height="24" title="Norconex" alt="Norconex">
-            <span style="font-size: 20px;">${pom.projectShortName}</span>
-            <small><small>${pom.projectVersion}</small></small>
-          </a>
-          <button class="navbar-toggler" type="button" 
-              data-toggle="collapse" data-target="#navbarSupportedContent" 
-              aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-      
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul id="navbarActions" class="navbar-nav ml-auto">
-              <li class="nav-item dropdown">
-                <a class="btn btn-sm py-1 my-2 btn-primary text-light nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  View
-                </a>
-                <div id="navigateDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
-                </div>
-              </li>
-
-              <li id="jumpToDropdownList" class="nav-item dropdown">
-                <a class="btn btn-sm py-1 my-2 ml-3 btn-primary text-light nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Jump To
-                </a>
-                <div id="jumpToDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <h6 class="dropdown-header">Summary</h6>
-                  <div class="dropdown-divider"></div>
-                  <h6 class="dropdown-header">Details</h6>
-                </div>
-              </li>
-
-              <li id="navbarFrames" class="nav-item">
-                <div class="btn-group btn-group-sm py-1 my-1 ml-3 text-nowrap" role="group" aria-label="Frames or no frames">
-                </div>
-              </li>
-
-              <li id="navbarPrevNext" class="nav-item">
-                <div class="btn-group btn-group-sm py-1 my-1 ml-3 text-nowrap" role="group" aria-label="Previous or next class">
-                </div>
-              </li>
-            </ul>
-          </div>
-          <a name="skip.navbar.top"></a>
-        </nav>`;
+    var navBar = [
+        '<nav id="topNav" class="navbar navbar-expand-sm navbar-dark bg-primary py-0">',
+          '<a name="navbar.top"></a>',
+          '<div class="skipNav"><a href="#skip.navbar.top" title="Skip navigation links">Skip navigation links</a></div>',
+          '<a name="navbar.top.firstrow"></a>',
+          '<a class="navbar-brand" href="' + pom.projectURL + '">',
+            '<img id="imgLogo" src="' + pom.docRoot + 'norconex-logo-white.png" height="24" title="Norconex" alt="Norconex">',
+            '<span style="font-size: 20px;">' + pom.projectShortName + '</span>',
+            '<small><small>' + pom.projectVersion + '</small></small>',
+          '</a>',
+          '<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">',
+            '<span class="navbar-toggler-icon"></span>',
+          '</button>',
+          '<div class="collapse navbar-collapse" id="navbarSupportedContent">',
+            '<ul id="navbarActions" class="navbar-nav ml-auto">',
+              '<li class="nav-item dropdown">',
+                '<a class="btn btn-sm py-1 my-2 btn-primary text-light nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">',
+                  'View',
+                '</a>',
+                '<div id="navigateDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">',
+                '</div>',
+              '</li>',
+              '<li id="jumpToDropdownList" class="nav-item dropdown">',
+                '<a class="btn btn-sm py-1 my-2 ml-3 btn-primary text-light nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">',
+                  'Jump To',
+                '</a>',
+                '<div id="jumpToDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">',
+                  '<h6 class="dropdown-header">Summary</h6>',
+                  '<div class="dropdown-divider"></div>',
+                  '<h6 class="dropdown-header">Details</h6>',
+                '</div>',
+              '</li>',
+              '<li id="navbarFrames" class="nav-item">',
+                '<div class="btn-group btn-group-sm py-1 my-1 ml-3 text-nowrap" role="group" aria-label="Frames or no frames"></div>',
+              '</li>',
+              '<li id="navbarPrevNext" class="nav-item">',
+                '<div class="btn-group btn-group-sm py-1 my-1 ml-3 text-nowrap" role="group" aria-label="Previous or next class"></div>',
+              '</li>',
+            '</ul>',
+          '</div>',
+          '<a name="skip.navbar.top"></a>',
+        '</nav>'
+      ].join("\n");
       $(navBar).prependTo($('body'));
       
       // Remove bottom nav:
@@ -281,7 +272,6 @@ function doPageClass() {
     _doPageClass_Summary();
     _doPageClass_Details();
 }
-
 function _doPageClass_Header() {
     // package:
     var elSubTitle = $('body > .header > .subTitle');
@@ -297,44 +287,42 @@ function _doPageClass_Header() {
         renameElement($(elTitle), 'h1');
     }
 
-    var defaultCopyType = localStorage.dropdownCopy;
-    if (!defaultCopyType) {
-        defaultCopyType = 'copy-full';
-    }
-    
+    var defaultCopyType = getLocalStorage('dropdownCopy', 'copy-full');
+
     // Copy button:
-    $(`<div class="btn-group btn-group-sm ml-3" title="Copy to clipboard">
-      <button id="btnCopy" type="button" class="btn btn-outline-primary">
-        <i class="fas fa-clipboard"></i>
-      </button>
-      <button type="button" class="btn btn-outline-primary dropdown-toggle 
-          dropdown-toggle-split" id="dropdownMenuCopy" data-toggle="dropdown" 
-          aria-haspopup="true" aria-expanded="false" data-reference="parent">
-        <span class="sr-only">Toggle Dropdown</span>
-      </button>
-      <div id="dropdownCopy" class="dropdown-menu aria-labelledby="dropdownMenuCopy">
-        <a id="copy-full"  class="dropdown-item" href="#"><i class="fas fa-signature mr-2"></i>Full name</a>
-        <a id="copy-short" class="dropdown-item" href="#"><i class="fas fa-signature fa-xs mr-2"></i>&nbsp;Short name</a>
-        <a id="copy-html"  class="dropdown-item" href="#"><i class="fas fa-code mr-2"></i>HTML link</a>
-        <a id="copy-md"    class="dropdown-item" href="#"><i class="fab fa-markdown mr-2"></i>Markdown link</a>
-      </div>
-    </div>`).appendTo('body > .header > h1.title');
+    $([
+        '<div class="btn-group btn-group-sm ml-3" title="Copy to clipboard">',
+          '<button id="btnCopy" type="button" class="btn btn-outline-primary">',
+            '<i class="fas fa-clipboard"></i>',
+          '</button>',
+          '<button type="button" class="btn btn-outline-primary dropdown-toggle dropdown-toggle-split" id="dropdownMenuCopy" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-reference="parent">',
+            '<span class="sr-only">Toggle Dropdown</span>',
+          '</button>',
+          '<div id="dropdownCopy" class="dropdown-menu aria-labelledby="dropdownMenuCopy">',
+            '<a id="copy-full"  class="dropdown-item" href="#"><i class="fas fa-signature mr-2"></i>Full name</a>',
+            '<a id="copy-short" class="dropdown-item" href="#"><i class="fas fa-signature fa-xs mr-2"></i>&nbsp;Short name</a>',
+            '<a id="copy-html"  class="dropdown-item" href="#"><i class="fas fa-code mr-2"></i>HTML link</a>',
+            '<a id="copy-md"    class="dropdown-item" href="#"><i class="fab fa-markdown mr-2"></i>Markdown link</a>',
+          '</div>',
+        '</div>'
+    ].join("\n")).appendTo('body > .header > h1.title');
     $('#' + defaultCopyType).addClass('active');
 
     // Copy notif.
-    $(`<div id="copyToast" class="toast border border-dark" data-delay="2000"
-        style="position: absolute; top: 50px; right: 10px; z-index: 2000;">
-      <div class="toast-header text-dark">
-        <i class="fas fa-clipboard"></i>&nbsp;
-        <strong class="mr-auto">Copied!</strong>
-        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="toast-body text-secondary">
-        Successfully copied.
-      </div>
-    </div>`).appendTo('body');
+    $([
+        '<div id="copyToast" class="toast border border-dark" data-delay="2000" style="position: absolute; top: 50px; right: 10px; z-index: 2000;">',
+          '<div class="toast-header text-dark">',
+            '<i class="fas fa-clipboard"></i>&nbsp;',
+            '<strong class="mr-auto">Copied!</strong>',
+            '<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">',
+              '<span aria-hidden="true">&times;</span>',
+            '</button>',
+          '</div>',
+          '<div class="toast-body text-secondary">',
+            'Successfully copied.',
+          '</div>',
+        '</div>'
+    ].join("\n")).appendTo('body');
 
     // Clicked: do the copy
     $('#dropdownCopy a, #btnCopy').click(function() {
@@ -364,7 +352,7 @@ function _doPageClass_Header() {
         $('#' + defaultCopyType).removeClass('active');
         $('#' + copyType).addClass('active');
         defaultCopyType = copyType;
-        localStorage.dropdownCopy = copyType;
+        setLocalStorage('dropdownCopy', copyType);
         $('#copyToast > .toast-body').text(toastBody);
         $('#copyToast').toast('show');
     });
@@ -376,15 +364,12 @@ function _doPageClass_Description() {
     $(content).find('> .description > ul > li div.block').attr('id', 'classDesc');
 
     //--- Class description: ---
-    $(`<div id="classPanel" class="text-justify pl-3">
-       </div>`).prependTo(content);
+    $('<div id="classPanel" class="text-justify pl-3"></div>').prependTo(content);
     $('#classDesc').appendTo('#classPanel');
     
     //--- Class details: ---
-    $(`<hr><div class="my-3">
-         <dl id="classDetails" class="row py-2 my-0">
-         </dl>
-       </div>`).appendTo('#classPanel');;
+    $('<hr><div class="my-3"><dl id="classDetails" '
+            + 'class="row py-2 my-0"></dl></div>').appendTo('#classPanel');
 
     // Class signature
     var classSign = $(content).find('> .description > ul > li > pre').html();
@@ -539,7 +524,6 @@ function doPageIndex() {
 }
 
 
-
 //==============================================================================
 // UTILITIES
 //==============================================================================
@@ -587,3 +571,30 @@ function copyToClipboard(text) {
     $temp.remove();
 }
 
+
+function getLocalStorage(key, defaultValue) {
+    try {
+        var value = localStorage.getItem(key);
+        if (!value) {
+            return defaultValue;
+        }
+    } catch (e) {
+        return defaultValue;
+    }
+}
+function setLocalStorage(key, value) {
+    try {
+        localStorage.setItem(key, value);
+    } catch (e) {
+        // swallow
+    }
+}
+//
+//
+//function supportsLocalStorage() {
+//    try {
+//        return 'localStorage' in window && window['localStorage'] !== null;
+//    } catch (e) {
+//        return false;
+//    }
+//  }
