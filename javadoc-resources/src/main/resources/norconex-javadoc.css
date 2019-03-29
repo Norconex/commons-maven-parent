@@ -202,13 +202,10 @@ Base selectors:
 
 #classDesc pre {
     font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
-    /* color: #e83e8c; */
-    /* color: #00aa00; */
     color: #408080;
 }
 
 body > .contentContainer code {
-    /* color: #00aa00; */
     color: #408080;
 }
 body > .contentContainer .detailPanel > pre {
@@ -310,4 +307,3 @@ body > .header > h1 > .titleHeading {
 #pageOverview table.overviewSummary td {
     white-space: nowrap;
 } 
-

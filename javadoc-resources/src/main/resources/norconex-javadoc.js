@@ -277,7 +277,7 @@ function _doPageClass_Header() {
     var elSubTitle = $('body > .header > .subTitle');
     var packageName = $(elSubTitle).text();
     $(elSubTitle).empty();
-    $(elSubTitle).append('<span id="packageName">' + packageName + '</span>');
+    $(elSubTitle).append('<a id="packageName" href="package-summary.html">' + packageName + '</a>');
 
     // class name:
     var elTitle = $('body > .header > h2')
@@ -490,7 +490,6 @@ function doPageUse() {
 function doPageTree() {
     $('body > .header > ul').prependTo($('body > .contentContainer'));
     $('body > .header > .packageHierarchyLabel').prependTo($('body > .contentContainer'));
-    
 }
 
 
@@ -589,12 +588,3 @@ function setLocalStorage(key, value) {
         // swallow
     }
 }
-//
-//
-//function supportsLocalStorage() {
-//    try {
-//        return 'localStorage' in window && window['localStorage'] !== null;
-//    } catch (e) {
-//        return false;
-//    }
-//  }
