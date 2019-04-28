@@ -45,6 +45,8 @@
     <slf4j.version>1.7.25</slf4j.version>
     <xerces.version>2.12.0</xerces.version>
     <json.version>1.8</json.version>
+    <xpath2.version>2.1.100</xpath2.version>
+    <java-cup.version>10k</java-cup.version>
 
     <!-- Test dependencies -->
     <junit-jupiter.version>5.4.2</junit-jupiter.version>
@@ -73,6 +75,19 @@
         <enabled>true</enabled>
       </snapshots>
     </repository>
+    <!-- 
+    <repository>
+      <id>jabylon.releases</id>
+      <name>Jabylon Releases Repository</name>
+      <url>http://www.jabylon.org/maven/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+     -->
   </repositories>
 
   <dependencyManagement>
@@ -125,12 +140,42 @@
         <artifactId>slf4j-api</artifactId>
         <version>${slf4j.version}</version>
       </dependency>
+      
+      <!-- For XSD 1.1 support until Apache releases their Xerces version
+           with 1.1 support to Maven central. -->
+      <dependency>
+        <groupId>org.exist-db.thirdparty.xerces</groupId>
+        <artifactId>xercesImpl</artifactId>
+        <version>${xerces.version}</version>
+        <classifier>xml-schema-1.1</classifier>
+      </dependency>
+      <!-- xpath2 and java-cup are needed at runtime
+              for xercesImpl Schema 1.1 support with above dep. -->
+
+      <dependency>
+        <groupId>com.rackspace.eclipse.webtools.sourceediting</groupId>
+        <artifactId>org.eclipse.wst.xml.xpath2.processor</artifactId>
+        <version>${xpath2.version}</version>
+      </dependency>
+<!-- 
+      <dependency>
+        <groupId>org.exist-db.thirdparty.org.eclipse.wst.xml</groupId>
+        <artifactId>xpath2</artifactId>
+        <version>${xpath2.version}</version>
+      </dependency>
+ -->              
+      <dependency>
+        <groupId>edu.princeton.cup</groupId>
+        <artifactId>java-cup</artifactId>
+        <version>${java-cup.version}</version>
+      </dependency>      
+      
+      <!-- 
       <dependency>
         <groupId>xerces</groupId>
         <artifactId>xercesImpl</artifactId>
         <version>${xerces.version}</version>
       </dependency>
-      <!-- 
       <dependency>
         <groupId>org.opengis.cite.xerces</groupId>
         <artifactId>xercesImpl-xsd11</artifactId>
