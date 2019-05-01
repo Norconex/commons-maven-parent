@@ -28,9 +28,6 @@
     <maven.compiler.target>1.8</maven.compiler.target>  
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    <!-- 
-    <site.baseurl/>
-     -->
 
     <!-- Norconex dependencies -->
     <norconex-commons-lang.version>2.0.0-SNAPSHOT</norconex-commons-lang.version>
@@ -75,19 +72,6 @@
         <enabled>true</enabled>
       </snapshots>
     </repository>
-    <!-- 
-    <repository>
-      <id>jabylon.releases</id>
-      <name>Jabylon Releases Repository</name>
-      <url>http://www.jabylon.org/maven/</url>
-      <releases>
-        <enabled>true</enabled>
-      </releases>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-     -->
   </repositories>
 
   <dependencyManagement>
@@ -151,37 +135,17 @@
       </dependency>
       <!-- xpath2 and java-cup are needed at runtime
               for xercesImpl Schema 1.1 support with above dep. -->
-
       <dependency>
         <groupId>com.rackspace.eclipse.webtools.sourceediting</groupId>
         <artifactId>org.eclipse.wst.xml.xpath2.processor</artifactId>
         <version>${xpath2.version}</version>
       </dependency>
-<!-- 
-      <dependency>
-        <groupId>org.exist-db.thirdparty.org.eclipse.wst.xml</groupId>
-        <artifactId>xpath2</artifactId>
-        <version>${xpath2.version}</version>
-      </dependency>
- -->              
       <dependency>
         <groupId>edu.princeton.cup</groupId>
         <artifactId>java-cup</artifactId>
         <version>${java-cup.version}</version>
       </dependency>      
-      
-      <!-- 
-      <dependency>
-        <groupId>xerces</groupId>
-        <artifactId>xercesImpl</artifactId>
-        <version>${xerces.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.opengis.cite.xerces</groupId>
-        <artifactId>xercesImpl-xsd11</artifactId>
-        <version>2.12-beta-r1667115</version>
-      </dependency>
-       -->
+
       <dependency>
         <groupId>com.tdunning</groupId>
         <artifactId>json</artifactId>
