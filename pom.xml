@@ -47,7 +47,7 @@
     <java-cup.version>10k</java-cup.version>
 
     <!-- Test dependencies -->
-    <junit-jupiter.version>5.4.2</junit-jupiter.version>
+    <junit-jupiter.version>5.5.1</junit-jupiter.version>
     <log4j.version>2.11.2</log4j.version>
     <ant.version>1.10.5</ant.version>
   </properties>
