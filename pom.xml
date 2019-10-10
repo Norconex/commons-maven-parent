@@ -45,6 +45,7 @@
     <json.version>1.8</json.version>
     <xpath2.version>2.1.100</xpath2.version>
     <java-cup.version>10k</java-cup.version>
+    <jackson.version>2.9.10</jackson.version>
 
     <!-- Test dependencies -->
     <junit-jupiter.version>5.5.1</junit-jupiter.version>
@@ -120,6 +121,33 @@
         <artifactId>slf4j-api</artifactId>
         <version>${slf4j.version}</version>
       </dependency>
+      
+      <dependency>
+        <groupId>com.fasterxml.jackson.datatype</groupId>
+        <artifactId>jackson-core</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.datatype</groupId>
+        <artifactId>jackson-annotation</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.datatype</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.datatype</groupId>
+        <artifactId>jackson-datatype-jsr310</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.fasterxml.jackson.datatype</groupId>
+        <artifactId>jackson-datatype-jdk8</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+      
       <!-- TODO: REMOVE THIS ONE IN FAVOR OF PICOCLI? -->
       <dependency>
         <groupId>commons-cli</groupId>
@@ -190,7 +218,6 @@
         <version>${slf4j.version}</version>
         <scope>test</scope>
       </dependency>
-
     </dependencies>
   </dependencyManagement>
 
