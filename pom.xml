@@ -348,9 +348,9 @@
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>3.0.1</version>
           <configuration>
-            <reportOutputDirectory>${project.build.directory}</reportOutputDirectory>
-            <outputDirectory>${project.build.directory}</outputDirectory>
-            <stylesheetfile>${project.build.directory}/apidocs/norconex-javadoc.css</stylesheetfile>
+            <reportOutputDirectory>${project.build.directory}/site</reportOutputDirectory>
+            <outputDirectory>${project.build.directory}/site/apidocs</outputDirectory>
+            <stylesheetfile>${project.build.directory}/site/apidocs/norconex-javadoc.css</stylesheetfile>
             <resourcesArtifacts>
               <resourcesArtifact>
                 <groupId>com.norconex.commons</groupId>
@@ -388,9 +388,9 @@
             <show>protected</show>
             <nodeprecated>false</nodeprecated>
             <source>${maven.compiler.source}</source>
-            <detectLinks>false</detectLinks>
+            <detectLinks>true</detectLinks>
             <links>
-              <!-- For all dependencies defined above. 
+              <!-- All above dependencies are referenced here. 
                    Do not end with forward slash as it can cause issues
                    finding the links.
                 -->
@@ -417,12 +417,6 @@
             <execution>
               <id>make-javadoc</id>
               <phase>prepare-package</phase>
-              <goals>
-                <goal>javadoc</goal>
-              </goals>
-            </execution>
-            <execution>
-              <id>attach-javadocs</id>
               <goals>
                 <goal>jar</goal>
               </goals>
