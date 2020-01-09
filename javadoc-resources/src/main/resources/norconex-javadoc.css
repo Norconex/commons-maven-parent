@@ -1,16 +1,27 @@
-/*
- * Norconex JavaDoc CSS
+/* Copyright 2019-2020 Norconex Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 :root {
-  --icon-annotation: url('bullet-annotation.png');
-  --icon-class: url('bullet-class.png');
-  --icon-enum: url('bullet-enum.png');
-  --icon-exception: url('bullet-exception.png');
-  --icon-interface: url('bullet-interface.png');
-  --icon-method: url('bullet-method.png');
-  --icon-package: url('bullet-package.png');
-  --icon-packages: url('bullet-packages.png');
+  --icon-annotation: url('icon-annotation.svg');
+  --icon-class: url('icon-class.svg');
+  --icon-enum: url('icon-enum.svg');
+  --icon-exception: url('icon-exception.svg');
+  --icon-interface: url('icon-interface.svg');
+  --icon-method: url('icon-method.svg');
+  --icon-package: url('icon-package.svg');
+  --icon-allclasses: url('icon-allclasses.svg');
 }
 
 
@@ -70,6 +81,8 @@ body > h1.bar {
     font-size: 1.0rem !important;
     line-height: 1.2;
     background-color: #f8f9fa;
+/*     background-color: #007bff!important; */
+/*     color: #fff; */
     border-bottom: 1px solid #dee2e6;
     padding-top: 3px;
     padding-bottom: 3px;
@@ -98,7 +111,7 @@ Base selectors:
 
 /* All Classes icon */
 body > .indexHeader span a[target="packageFrame"]:before {
-    content: var(--icon-packages);
+    content: var(--icon-allclasses);
     position: relative;
     padding-right: 2px;
     top: 3px;
@@ -144,15 +157,17 @@ body > h1.bar + .indexContainer > ul li a[title^="class in"]:before {
 body > h1.bar + .indexContainer > ul li a[title^="interface in"]:before {
     content: var(--icon-interface);
     position: relative;
-    padding-right: 2px;
-    top: 3px;
+    padding-left: 1px;
+    padding-right: 1px;
+    top: 5px;
 }
 /* Enum icon */
 body > h1.bar + .indexContainer > ul li a[title^="enum in"]:before {
     content: var(--icon-enum);
     position: relative;
-    padding-right: 2px;
-    top: 3px;
+    padding-left: 1px;
+    padding-right: 1px;
+    top:5px;
 }
 
 
