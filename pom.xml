@@ -346,7 +346,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.0.1</version>
+          <version>3.1.1</version>
           <configuration>
             <reportOutputDirectory>${project.build.directory}/site</reportOutputDirectory>
             <outputDirectory>${project.build.directory}/site/apidocs</outputDirectory>
@@ -359,15 +359,17 @@
               </resourcesArtifact>
             </resourcesArtifacts>
             <additionalJOptions>
-                <additionalJOption>&#45;&#45;allow-script-in-comments</additionalJOption>
+              <additionalJOption>&#45;&#45;allow-script-in-comments</additionalJOption>
+              <additionalJOption>-J-Dbasedir=${basedir}</additionalJOption>
             </additionalJOptions>
             <overview>src/main/javadoc/overview.html</overview>
             <packagesheader>${project.name} API</packagesheader>
             <top><![CDATA[
               <script src="{@docRoot}/jquery-3.3.1.min.js" type="text/javascript"></script>
               <script src="{@docRoot}/bootstrap.bundle.min.js" type="text/javascript"></script>
-              <script src="{@docRoot}/norconex-javadoc.js" type="text/javascript"></script>
+              <script src="{@docRoot}/prism.js" type="text/javascript"></script>
               <link href="{@docRoot}/bootstrap.min.css" rel="stylesheet" type="text/css">
+              <link href="{@docRoot}/prism.css" rel="stylesheet" type="text/css">
               <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
             ]]>
             </top>
@@ -383,12 +385,13 @@
               <a style="font-size: 1.4em;" href="${project.issueManagement.url}">Submit an Issue</a>
               &nbsp;&nbsp;|&nbsp;&nbsp; 
               <a style="font-size: 1.4em;" href="https://www.norconex.com">norconex.com</a>
+              <script src="{@docRoot}/norconex-javadoc.js" type="text/javascript"></script>
             ]]>
             </footer>
             <show>protected</show>
             <nodeprecated>false</nodeprecated>
             <source>${maven.compiler.source}</source>
-            <detectLinks>true</detectLinks>
+            <detectLinks>false</detectLinks>
             <links>
               <!-- All above dependencies are referenced here. 
                    Do not end with forward slash as it can cause issues
@@ -412,6 +415,17 @@
               <link>https://logging.apache.org/log4j/2.x/log4j-api/apidocs</link>
               <link>https://ant.apache.org/manual/api</link>
             </links>
+            <taglets>
+              <taglet><tagletClass>com.norconex.commons.lang.javadoc.IncludeTaglet</tagletClass></taglet>
+              <taglet><tagletClass>com.norconex.commons.lang.javadoc.XMLTaglet</tagletClass></taglet>
+              <taglet><tagletClass>com.norconex.commons.lang.javadoc.XMLUsageTaglet</tagletClass></taglet>
+              <taglet><tagletClass>com.norconex.commons.lang.javadoc.XMLExampleTaglet</tagletClass></taglet>
+            </taglets>
+            <tagletArtifact>
+              <groupId>com.norconex.commons</groupId>
+              <artifactId>norconex-commons-lang</artifactId>
+              <version>${norconex-commons-lang.version}</version>
+            </tagletArtifact>
           </configuration>
           <executions>
             <execution>

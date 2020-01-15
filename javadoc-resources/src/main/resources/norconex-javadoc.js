@@ -26,6 +26,22 @@ if (location.href.indexOf('norconex.com') != -1) {
   })();
 }
 
+Prism.plugins.NormalizeWhitespace.setDefaults({
+    'remove-trailing': true,
+    'remove-indent': true,
+    'left-trim': true,
+    'right-trim': true,
+    'tabs-to-spaces': 4,
+    /*
+    'indent': 2
+    'break-lines': 80,
+    'remove-initial-line-feed': false,
+    'tabs-to-spaces': 4,
+    'spaces-to-tabs': 4
+    */
+});    
+
+
 // Global vars
 var pom = {};
 var page = {};
@@ -40,6 +56,7 @@ $(document).ready(function() {
     eval('doPage' + page.navName + '();');
     
     $('.toast').toast();
+    
 });
 
 //==============================================================================
@@ -70,10 +87,11 @@ function doForAllPages() {
     if (page.navName != 'Use' && page.navName != 'Deprecated') {
         $('table > caption').remove();
     }
-    
+
+    // Class tweaks
     $('body > .contentContainer').addClass('container-fluid');
-    
     $('.deprecationComment').addClass('text-danger');
+    $('div.code-toolbar > .toolbar button').addClass('btn btn-primary');
 }
 
 // ALL PAGES: Top Nav Bar
