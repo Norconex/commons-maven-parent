@@ -415,6 +415,11 @@
               <link>https://logging.apache.org/log4j/2.x/log4j-api/apidocs</link>
               <link>https://ant.apache.org/manual/api</link>
             </links>
+            <!-- For IncludeTaglet to work on external source files, the 
+                 "-sources.jar" artifact must be present in local Maven 
+                 repository or needs to be explicitly added as a JavaDoc
+                 additional dependency. 
+                 -->
             <taglets>
               <taglet><tagletClass>com.norconex.commons.lang.javadoc.IncludeTaglet</tagletClass></taglet>
               <taglet><tagletClass>com.norconex.commons.lang.javadoc.XMLTaglet</tagletClass></taglet>
@@ -544,7 +549,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-dependency-plugin</artifactId>
-          <version>3.0.0</version>
+          <version>3.1.1</version>
         </plugin>
 <!-- 
         <plugin>
