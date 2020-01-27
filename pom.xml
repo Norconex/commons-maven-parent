@@ -40,7 +40,7 @@
     <commons-cli.version>1.4</commons-cli.version>
     <picocli.version>4.0.1</picocli.version>
     <velocity-engine.version>2.0</velocity-engine.version>
-    <slf4j.version>1.7.25</slf4j.version>
+    <slf4j.version>1.7.30</slf4j.version>
     <xerces.version>2.12.0</xerces.version>
     <json.version>1.8</json.version>
     <xpath2.version>2.1.100</xpath2.version>
