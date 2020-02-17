@@ -425,6 +425,8 @@
               <taglet><tagletClass>com.norconex.commons.lang.javadoc.XMLTaglet</tagletClass></taglet>
               <taglet><tagletClass>com.norconex.commons.lang.javadoc.XMLUsageTaglet</tagletClass></taglet>
               <taglet><tagletClass>com.norconex.commons.lang.javadoc.XMLExampleTaglet</tagletClass></taglet>
+              <taglet><tagletClass>com.norconex.commons.lang.javadoc.BlockTaglet</tagletClass></taglet>
+              <taglet><tagletClass>com.norconex.commons.lang.javadoc.HTMLTaglet</tagletClass></taglet>
             </taglets>
             <tagletArtifact>
               <groupId>com.norconex.commons</groupId>
