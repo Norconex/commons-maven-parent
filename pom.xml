@@ -82,6 +82,9 @@
 
   <dependencyManagement>
     <dependencies>
+    
+      <!-- Norconex dependencies -->
+    
       <dependency>
           <groupId>com.norconex.commons</groupId>
           <artifactId>norconex-commons-lang</artifactId>
@@ -95,6 +98,29 @@
           <type>zip</type>
           <scope>provided</scope>
       </dependency>
+      <dependency>
+        <groupId>com.norconex.collectors</groupId>
+        <artifactId>norconex-collector-core</artifactId>
+        <version>${norconex-collector-core.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.norconex.collectors</groupId>
+        <artifactId>norconex-importer</artifactId>
+        <version>${norconex-importer.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.norconex.collectors</groupId>
+        <artifactId>norconex-committer-core</artifactId>
+        <version>${norconex-committer-core.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.norconex.jef</groupId>
+        <artifactId>norconex-jef</artifactId>
+        <version>${norconex-jef.version}</version>
+      </dependency>
+
+      <!-- Other dependencies -->
+
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>commons-lang3</artifactId>
