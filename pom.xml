@@ -31,6 +31,9 @@
 
     <!-- Norconex dependencies -->
     <norconex-commons-lang.version>2.0.0-SNAPSHOT</norconex-commons-lang.version>
+    <norconex-importer.version>3.0.0-SNAPSHOT</norconex-importer.version>
+    <norconex-jef.version>5.0.0-SNAPSHOT</norconex-jef.version>
+    <norconex-committer-core.version>3.0.0-SNAPSHOT</norconex-committer-core.version>
 
     <!-- Regular dependencies -->
     <commons-lang3.version>3.8.1</commons-lang3.version>
@@ -428,11 +431,13 @@
               <taglet><tagletClass>com.norconex.commons.lang.javadoc.BlockTaglet</tagletClass></taglet>
               <taglet><tagletClass>com.norconex.commons.lang.javadoc.HTMLTaglet</tagletClass></taglet>
             </taglets>
-            <tagletArtifact>
-              <groupId>com.norconex.commons</groupId>
-              <artifactId>norconex-commons-lang</artifactId>
-              <version>${norconex-commons-lang.version}</version>
-            </tagletArtifact>
+            <tagletArtifacts>
+              <tagletArtifact>
+                <groupId>com.norconex.commons</groupId>
+                <artifactId>norconex-commons-lang</artifactId>
+                <version>${norconex-commons-lang.version}</version>
+              </tagletArtifact>
+            </tagletArtifacts>
           </configuration>
           <executions>
             <execution>
