@@ -34,6 +34,7 @@
     <norconex-importer.version>3.0.0-SNAPSHOT</norconex-importer.version>
     <norconex-jef.version>5.0.0-SNAPSHOT</norconex-jef.version>
     <norconex-committer-core.version>3.0.0-SNAPSHOT</norconex-committer-core.version>
+    <norconex-collector-core.version>2.0.0-SNAPSHOT</norconex-collector-core.version>
 
     <!-- Regular dependencies -->
     <commons-lang3.version>3.8.1</commons-lang3.version>
