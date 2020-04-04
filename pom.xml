@@ -464,6 +464,7 @@
               <taglet><tagletClass>com.norconex.commons.lang.javadoc.XMLExampleTaglet</tagletClass></taglet>
               <taglet><tagletClass>com.norconex.commons.lang.javadoc.BlockTaglet</tagletClass></taglet>
               <taglet><tagletClass>com.norconex.commons.lang.javadoc.HTMLTaglet</tagletClass></taglet>
+              <taglet><tagletClass>com.norconex.commons.lang.javadoc.JSONTaglet</tagletClass></taglet>
             </taglets>
             <tagletArtifacts>
               <tagletArtifact>
