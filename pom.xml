@@ -72,7 +72,10 @@
     <repository>
       <id>sonatype.oss.snapshots</id>
       <name>Sonatype OSS Snapshot Repository</name>
-      <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+      <!-- 
+        <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+        -->
+      <url>https://maven.norconex.com/repository/maven-snapshots/</url>
       <releases>
         <enabled>false</enabled>
       </releases>
@@ -575,6 +578,7 @@
           <inherited>true</inherited>
         </plugin>
 
+<!-- 
         <plugin>
           <groupId>org.sonatype.plugins</groupId>
           <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -587,6 +591,19 @@
           </configuration>
           <inherited>true</inherited>
         </plugin>
+ -->
+
+        <plugin>
+          <groupId>org.sonatype.plugins</groupId>
+          <artifactId>nexus-staging-maven-plugin</artifactId>
+          <extensions>true</extensions>
+          <configuration>
+            <serverId>ossrh</serverId>
+            <nexusUrl>https://maven.norconex.com</nexusUrl>
+            <skipStaging>true</skipStaging>
+          </configuration>
+          <inherited>true</inherited>
+        </plugin> 
 
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -646,7 +663,10 @@
   <distributionManagement>
     <snapshotRepository>
       <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <url>https://maven.norconex.com/repository/maven-snapshots/</url>
+      <!--
+        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        -->
     </snapshotRepository>
     <repository>
       <id>ossrh</id>
