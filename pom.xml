@@ -70,7 +70,7 @@
 
   <repositories>
     <repository>
-      <id>sonatype.oss.snapshots</id>
+      <id>sonatype-oss-snapshots</id>
       <name>Sonatype OSS Snapshot Repository</name>
       <!-- 
         <url>http://oss.sonatype.org/content/repositories/snapshots</url>
@@ -662,10 +662,11 @@
 
   <distributionManagement>
     <snapshotRepository>
-      <id>ossrh</id>
+      <id>norconex-repo-snapshots</id>
       <url>https://maven.norconex.com/repository/maven-snapshots/</url>
       <!--
-        <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         -->
     </snapshotRepository>
     <repository>
