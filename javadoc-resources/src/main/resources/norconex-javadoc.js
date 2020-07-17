@@ -102,7 +102,7 @@ function _doForAllPages_TopNavBar() {
           '<a name="navbar.top"></a>',
           '<div class="skipNav"><a href="#skip.navbar.top" title="Skip navigation links">Skip navigation links</a></div>',
           '<a name="navbar.top.firstrow"></a>',
-          '<a class="navbar-brand" href="' + pom.projectURL + '">',
+          '<a class="navbar-brand" href="' + pom.projectURL + '" target="_BLANK">',
             '<img id="imgLogo" src="' + pom.docRoot + 'norconex-logo-white.png" height="24" title="Norconex" alt="Norconex">',
             '<span style="font-size: 20px;">' + pom.projectShortName + '</span>',
             '<small><small>' + pom.projectVersion + '</small></small>',
@@ -120,7 +120,7 @@ function _doForAllPages_TopNavBar() {
                 '</div>',
               '</li>',
               '<li id="jumpToDropdownList" class="nav-item dropdown">',
-                '<a class="btn btn-sm py-1 my-2 ml-3 btn-primary text-light nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">',
+                '<a class="btn btn-sm py-1 my-2 ml-2 btn-primary text-light nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">',
                   'Jump To',
                 '</a>',
                 '<div id="jumpToDropdown" class="dropdown-menu" aria-labelledby="navbarDropdown">',
@@ -130,10 +130,10 @@ function _doForAllPages_TopNavBar() {
                 '</div>',
               '</li>',
               '<li id="navbarFrames" class="nav-item">',
-                '<div class="btn-group btn-group-sm py-1 my-1 ml-3 text-nowrap" role="group" aria-label="Frames or no frames"></div>',
+                '<div class="btn-group btn-group-sm py-1 my-1 ml-2 text-nowrap" role="group" aria-label="Frames or no frames"></div>',
               '</li>',
               '<li id="navbarPrevNext" class="nav-item">',
-                '<div class="btn-group btn-group-sm py-1 my-1 ml-3 text-nowrap" role="group" aria-label="Previous or next class"></div>',
+                '<div class="btn-group btn-group-sm py-1 my-1 ml-2 text-nowrap" role="group" aria-label="Previous or next class"></div>',
               '</li>',
             '</ul>',
           '</div>',
@@ -444,6 +444,10 @@ function _doPageClass_Summary() {
         $(tbody).find('> thead').insertBefore(tbody);
         $(this).find('> thead').addClass('thead-light');
     });
+
+    // Field Summary
+    $('h3:contains("Field Summary")').attr('id', 'fieldSummary');
+    renameElement($('#fieldSummary'), 'h2');
 
     // Constructor Summary
     $('h3:contains("Constructor Summary")').attr('id', 'constrSummary');

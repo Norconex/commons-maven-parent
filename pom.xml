@@ -304,7 +304,7 @@
       <extension>
         <groupId>org.apache.maven.wagon</groupId>
         <artifactId>wagon-ssh</artifactId>
-        <version>1.0</version>
+        <version>3.4.1</version>
       </extension>
     </extensions>
 
@@ -610,6 +610,21 @@
           <artifactId>maven-dependency-plugin</artifactId>
           <version>3.1.1</version>
         </plugin>
+        
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.9.1</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.apache.maven.wagon</groupId>
+              <artifactId>wagon-ssh</artifactId>
+              <version>3.4.1</version>
+            </dependency>
+          </dependencies>
+          <inherited>true</inherited>
+        </plugin>        
+        
 <!-- 
         <plugin>
           <groupId>org.codehaus.mojo</groupId>
