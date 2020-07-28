@@ -587,7 +587,6 @@
           <inherited>true</inherited>
         </plugin>
 
-<!-- 
         <plugin>
           <groupId>org.sonatype.plugins</groupId>
           <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -600,19 +599,6 @@
           </configuration>
           <inherited>true</inherited>
         </plugin>
- -->
-
-        <plugin>
-          <groupId>org.sonatype.plugins</groupId>
-          <artifactId>nexus-staging-maven-plugin</artifactId>
-          <extensions>true</extensions>
-          <configuration>
-            <serverId>ossrh</serverId>
-            <nexusUrl>https://maven.norconex.com</nexusUrl>
-            <skipStaging>true</skipStaging>
-          </configuration>
-          <inherited>true</inherited>
-        </plugin> 
 
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
