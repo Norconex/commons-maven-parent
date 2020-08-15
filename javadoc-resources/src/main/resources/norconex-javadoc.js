@@ -264,6 +264,10 @@ function doPageOverview() {
     
     bootstrapTable(table);
     $(table).addClass('table-sm');
+    
+    // Remove bottom nav:
+    $('body .bottomNav').remove();
+    $('body .subNav').remove();
 }
 
 
