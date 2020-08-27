@@ -375,7 +375,7 @@ function _doPageClass_Header() {
                  + className + '</a>';
              toastBody = 'Class copied as an HTML link.';
         } else if (copyType === 'copy-md') {
-            text = '(' + className + ')[' + page.url + ']';
+            text = '[' + className + '](' + page.url + ')';
             toastBody = 'Class copied as a Markdown link.';
         } else { // copy-full
             text = packageName + '.' + className;
