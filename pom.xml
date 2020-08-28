@@ -37,24 +37,24 @@
     <norconex-collector-core.version>2.0.0-SNAPSHOT</norconex-collector-core.version>
 
     <!-- Regular dependencies -->
-    <commons-lang3.version>3.8.1</commons-lang3.version>
-    <commons-collections4.version>4.3</commons-collections4.version>
-    <commons-io.version>2.6</commons-io.version>
-    <commons-text.version>1.6</commons-text.version>
+    <commons-lang3.version>3.11</commons-lang3.version>
+    <commons-collections4.version>4.4</commons-collections4.version>
+    <commons-io.version>2.7</commons-io.version>
+    <commons-text.version>1.9</commons-text.version>
     <commons-cli.version>1.4</commons-cli.version>
     <commons-logging.version>1.2</commons-logging.version>
     
-    <picocli.version>4.2.0</picocli.version>
+    <picocli.version>4.5.1</picocli.version>
     <velocity-engine.version>2.2</velocity-engine.version>
     <slf4j.version>1.7.30</slf4j.version>
-    <xerces.version>2.12.0</xerces.version>
+    <xerces.version>2.12.1</xerces.version>
     <json.version>1.8</json.version>
     <xpath2.version>2.1.100</xpath2.version>
     <java-cup.version>10k</java-cup.version>
-    <jackson.version>2.10.1</jackson.version>
+    <jackson.version>2.11.0</jackson.version>
 
     <log4j.version>2.13.3</log4j.version>
-    <ant.version>1.10.5</ant.version>
+    <ant.version>1.10.8</ant.version>
 
     <!-- Test dependencies -->
     <junit-jupiter.version>5.6.2</junit-jupiter.version>
@@ -392,7 +392,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.1.1</version>
+          <version>3.2.0</version>
           <configuration>
             <reportOutputDirectory>${project.build.directory}/site</reportOutputDirectory>
             <outputDirectory>${project.build.directory}/site/apidocs</outputDirectory>
@@ -444,23 +444,35 @@
                    finding the links.
                 -->
 
-              <!-- Norconex dependencies -->                   
+              <!-- Norconex dependencies -->
               <link>https://opensource.norconex.com/commons/lang/v2/apidocs</link>
+              <link>https://opensource.norconex.com/importer/v3/apidocs</link>
+              <link>https://opensource.norconex.com/jef/api/v5/apidocs</link>
+              <link>https://opensource.norconex.com/committers/core/v3/apidocs</link>
+              <link>https://opensource.norconex.com/collectors/core/v2/apidocs</link>
 
               <!-- Regular dependencies -->
-              <link>https://commons.apache.org/proper/commons-lang/javadocs/api-${commons-lang3.version}</link>
+              <link>https://commons.apache.org/proper/commons-lang/javadocs/api-release</link>
               <link>https://commons.apache.org/proper/commons-collections/javadocs/api-${commons-collections4.version}</link>
-              <!--link>https://commons.apache.org/proper/commons-text/javadocs/api-${commons-text.version}</link-->
+              <link>https://commons.apache.org/proper/commons-io/javadocs/api-release</link>
+              <link>https://commons.apache.org/proper/commons-text/apidocs</link>
               <link>https://commons.apache.org/proper/commons-cli/javadocs/api-release</link>
+              <link>https://commons.apache.org/proper/commons-logging/javadocs/api-release</link>
+              <link>https://picocli.info/apidocs</link>
               <link>https://velocity.apache.org/engine/${velocity-engine.version}/apidocs</link>
               <link>https://www.slf4j.org/apidocs</link>
-              <!-- Missing: xerces (1.1 schema), json, commons-text --> 
+              <link>https://javadoc.io/doc/com.tdunning/json/latest</link>
+              <link>https://fasterxml.github.io/jackson-modules-java8/javadoc/parameter-names/${jackson.version}</link>
+              <link>https://fasterxml.github.io/jackson-modules-java8/javadoc/datatypes/${jackson.version}</link>
+              <link>https://fasterxml.github.io/jackson-modules-java8/javadoc/datetime/${jackson.version}</link>
+              <!-- Missing: xerces (1.1 schema), xpath2, java-cup --> 
 
               <!-- Test dependencies -->
               <link>https://junit.org/junit5/docs/${junit-jupiter.version}/api</link>
               <link>https://logging.apache.org/log4j/2.x/log4j-api/apidocs</link>
               <link>https://ant.apache.org/manual/api</link>
             </links>
+            
             <!-- For IncludeTaglet to work on external source files, the 
                  "-sources.jar" artifact must be present in local Maven 
                  repository or needs to be explicitly added as a JavaDoc
