@@ -25,7 +25,8 @@
 
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>  
+    <maven.compiler.target>1.8</maven.compiler.target>
+	<java.version>1.8</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
@@ -462,10 +463,7 @@
               <link>https://velocity.apache.org/engine/${velocity-engine.version}/apidocs</link>
               <link>https://www.slf4j.org/apidocs</link>
               <link>https://javadoc.io/doc/com.tdunning/json/latest</link>
-              <link>https://fasterxml.github.io/jackson-modules-java8/javadoc/parameter-names/${jackson.version}</link>
-              <link>https://fasterxml.github.io/jackson-modules-java8/javadoc/datatypes/${jackson.version}</link>
-              <link>https://fasterxml.github.io/jackson-modules-java8/javadoc/datetime/${jackson.version}</link>
-              <!-- Missing: xerces (1.1 schema), xpath2, java-cup --> 
+              <!-- Missing: xerces (1.1 schema), xpath2, java-cup, jackson/fasterxml --> 
 
               <!-- Test dependencies -->
               <link>https://junit.org/junit5/docs/${junit-jupiter.version}/api</link>
