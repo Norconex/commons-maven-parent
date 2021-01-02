@@ -44,6 +44,7 @@
     <commons-text.version>1.9</commons-text.version>
     <commons-cli.version>1.4</commons-cli.version>
     <commons-logging.version>1.2</commons-logging.version>
+    <commons-codec.version>1.15</commons-codec.version>
     
     <picocli.version>4.5.1</picocli.version>
     <velocity-engine.version>2.2</velocity-engine.version>
@@ -149,6 +150,11 @@
         <groupId>commons-logging</groupId>
         <artifactId>commons-logging</artifactId>
         <version>${commons-logging.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>commons-codec</groupId>
+        <artifactId>commons-codec</artifactId>
+        <version>${commons-codec.version}</version>
       </dependency>
       <dependency>
         <groupId>org.apache.velocity</groupId>
