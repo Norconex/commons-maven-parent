@@ -37,7 +37,7 @@
     <norconex-committer-core.version>3.0.0-SNAPSHOT</norconex-committer-core.version>
     <norconex-collector-core.version>2.0.0-SNAPSHOT</norconex-collector-core.version>
 
-    <!-- Regular dependencies -->
+    <!-- Apache Commons dependencies -->
     <commons-lang3.version>3.11</commons-lang3.version>
     <commons-collections4.version>4.4</commons-collections4.version>
     <commons-io.version>2.7</commons-io.version>
@@ -46,6 +46,7 @@
     <commons-logging.version>1.2</commons-logging.version>
     <commons-codec.version>1.15</commons-codec.version>
     
+    <!-- Other dependencies -->
     <picocli.version>4.5.1</picocli.version>
     <velocity-engine.version>2.2</velocity-engine.version>
     <slf4j.version>1.7.30</slf4j.version>
@@ -54,9 +55,9 @@
     <xpath2.version>2.1.100</xpath2.version>
     <java-cup.version>10k</java-cup.version>
     <jackson.version>2.11.0</jackson.version>
-
     <log4j.version>2.13.3</log4j.version>
     <ant.version>1.10.8</ant.version>
+    <aws-java-sdk.version>1.11.930</aws-java-sdk.version>
 
     <!-- Test dependencies -->
     <junit-jupiter.version>5.6.2</junit-jupiter.version>
@@ -166,7 +167,12 @@
         <artifactId>slf4j-api</artifactId>
         <version>${slf4j.version}</version>
       </dependency>
-      
+      <dependency>
+        <groupId>com.amazonaws</groupId>
+        <artifactId>aws-java-sdk</artifactId>
+        <version>${aws-java-sdk.version}</version>
+      </dependency>      
+
       <dependency>
         <groupId>com.fasterxml.jackson.datatype</groupId>
         <artifactId>jackson-core</artifactId>
