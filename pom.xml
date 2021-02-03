@@ -56,7 +56,7 @@
     <java-cup.version>10k</java-cup.version>
     <jackson.version>2.11.0</jackson.version>
     <log4j.version>2.13.3</log4j.version>
-    <ant.version>1.10.8</ant.version>
+    <ant.version>1.10.9</ant.version>
     <aws-java-sdk.version>1.11.930</aws-java-sdk.version>
     <httpclient5.version>5.0.3</httpclient5.version>
 
