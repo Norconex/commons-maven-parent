@@ -19,7 +19,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.norconex.commons</groupId>
   <artifactId>norconex-commons-maven-parent</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0-M1</version>
   <packaging>pom</packaging>
   <name>Norconex Commons Maven Parent</name>
 
@@ -31,11 +31,11 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
     <!-- Norconex dependencies -->
-    <norconex-commons-lang.version>2.0.0-SNAPSHOT</norconex-commons-lang.version>
-    <norconex-importer.version>3.0.0-SNAPSHOT</norconex-importer.version>
-    <norconex-jef.version>5.0.0-SNAPSHOT</norconex-jef.version>
-    <norconex-committer-core.version>3.0.0-SNAPSHOT</norconex-committer-core.version>
-    <norconex-collector-core.version>2.0.0-SNAPSHOT</norconex-collector-core.version>
+    <norconex-commons-lang.version>2.0.0-M1</norconex-commons-lang.version>
+    <norconex-importer.version>3.0.0-M1</norconex-importer.version>
+    <norconex-jef.version>5.0.0-M1</norconex-jef.version>
+    <norconex-committer-core.version>3.0.0-M1</norconex-committer-core.version>
+    <norconex-collector-core.version>2.0.0-M1</norconex-collector-core.version>
 
     <!-- Apache Commons dependencies -->
     <commons-lang3.version>3.11</commons-lang3.version>
@@ -662,10 +662,18 @@
       </plugins>
     </pluginManagement>
 
-    <!-- Plugins all children should get.
     <plugins>
+      <!--  Use VM argument -Dgpg.skip=true to disable GPG signing. -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>nexus-staging-maven-plugin</artifactId>
+      </plugin>    
     </plugins>
-     -->
 
   </build>
 
@@ -683,6 +691,7 @@
     <name>Norconex Inc.</name>
     <url>https://norconex.com</url>
   </organization>
+  <url>https://github.com/Norconex/commons-maven-parent</url>
   <scm>
     <url>https://github.com/Norconex/commons-maven-parent</url>
     <connection>scm:git:git@github.com:Norconex/commons-maven-parent.git</connection>
