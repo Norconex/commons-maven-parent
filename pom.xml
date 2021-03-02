@@ -19,7 +19,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.norconex.commons</groupId>
   <artifactId>norconex-commons-maven-parent</artifactId>
-  <version>1.0.0-M1</version>
+  <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Norconex Commons Maven Parent</name>
 
@@ -32,7 +32,7 @@
 
     <!-- Norconex dependencies -->
     <norconex-commons-lang.version>2.0.0-M1</norconex-commons-lang.version>
-    <norconex-importer.version>3.0.0-M1</norconex-importer.version>
+    <norconex-importer.version>3.0.0-SNAPSHOT</norconex-importer.version>
     <norconex-jef.version>5.0.0-M1</norconex-jef.version>
     <norconex-committer-core.version>3.0.0-M1</norconex-committer-core.version>
     <norconex-collector-core.version>2.0.0-M1</norconex-collector-core.version>
