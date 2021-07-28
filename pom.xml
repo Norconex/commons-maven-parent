@@ -33,7 +33,7 @@
     <!-- Norconex dependencies -->
     <norconex-commons-lang.version>2.0.0-M2</norconex-commons-lang.version>
     <norconex-importer.version>3.0.0-M2</norconex-importer.version>
-    <norconex-committer-core.version>3.0.0-M1</norconex-committer-core.version>
+    <norconex-committer-core.version>3.0.0-M2</norconex-committer-core.version>
     <norconex-collector-core.version>2.0.0-M2</norconex-collector-core.version>
 
     <!-- Apache Commons dependencies -->
