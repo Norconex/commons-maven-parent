@@ -7,6 +7,11 @@
   </properties>
   <body>
 
+    <release version="1.0.0-SNAPSHOT" date="2021-??-??" 
+        description="Changes since last milestone for this upcoming major release.">
+      <!--  In progress -->
+    </release>
+
     <release version="1.0.0-M2" date="2021-07-28"
              description="Milestone release.">
       <action dev="essiembre" type="add">
