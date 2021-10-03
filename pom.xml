@@ -1,5 +1,5 @@
 <!-- 
-   Copyright 2019 Norconex Inc.
+   Copyright 2019-2021 Norconex Inc.
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.norconex.commons</groupId>
   <artifactId>norconex-commons-maven-parent</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0-RC1</version>
   <packaging>pom</packaging>
   <name>Norconex Commons Maven Parent</name>
 
@@ -31,36 +31,37 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
     <!-- Norconex dependencies -->
-    <norconex-commons-lang.version>2.0.0-SNAPSHOT</norconex-commons-lang.version>
-    <norconex-importer.version>3.0.0-SNAPSHOT</norconex-importer.version>
-    <norconex-committer-core.version>3.0.0-SNAPSHOT</norconex-committer-core.version>
-    <norconex-collector-core.version>2.0.0-SNAPSHOT</norconex-collector-core.version>
+    <norconex-commons-lang.version>2.0.0-RC1</norconex-commons-lang.version>
+    <norconex-importer.version>3.0.0-RC1</norconex-importer.version>
+    <norconex-committer-core.version>3.0.0-RC1</norconex-committer-core.version>
+    <norconex-collector-core.version>2.0.0-RC1</norconex-collector-core.version>
 
     <!-- Apache Commons dependencies -->
-    <commons-lang3.version>3.11</commons-lang3.version>
+    <commons-lang3.version>3.12.0</commons-lang3.version>
     <commons-collections4.version>4.4</commons-collections4.version>
-    <commons-io.version>2.7</commons-io.version>
+    <commons-io.version>2.11.0</commons-io.version>
     <commons-text.version>1.9</commons-text.version>
     <commons-cli.version>1.4</commons-cli.version>
     <commons-logging.version>1.2</commons-logging.version>
     <commons-codec.version>1.15</commons-codec.version>
     
     <!-- Other dependencies -->
-    <picocli.version>4.5.1</picocli.version>
-    <velocity-engine.version>2.2</velocity-engine.version>
-    <slf4j.version>1.7.30</slf4j.version>
+    <picocli.version>4.6.1</picocli.version>
+    <velocity-engine.version>2.3</velocity-engine.version>
+    <slf4j.version>1.7.32</slf4j.version>
     <xerces.version>2.12.1</xerces.version>
     <json.version>1.8</json.version>
     <xpath2.version>2.1.100</xpath2.version>
     <java-cup.version>10k</java-cup.version>
-    <jackson.version>2.11.0</jackson.version>
-    <log4j.version>2.13.3</log4j.version>
+    <jackson.version>2.13.0</jackson.version>
+    <log4j.version>2.14.1</log4j.version>
     <ant.version>1.10.11</ant.version>
-    <aws-java-sdk.version>1.11.930</aws-java-sdk.version>
-    <httpclient5.version>5.0.3</httpclient5.version>
+    <aws-java-sdk.version>1.12.78</aws-java-sdk.version>
+    <httpclient5.version>5.1</httpclient5.version>
 
     <!-- Test dependencies -->
-    <junit-jupiter.version>5.7.1</junit-jupiter.version>
+    <testcontainers.version>1.16.0</testcontainers.version>
+    <junit-jupiter.version>5.8.1</junit-jupiter.version>
   </properties>
 
   <inceptionYear>2019</inceptionYear>
@@ -92,17 +93,17 @@
       <!-- Norconex dependencies -->
     
       <dependency>
-          <groupId>com.norconex.commons</groupId>
-          <artifactId>norconex-commons-lang</artifactId>
-          <version>${norconex-commons-lang.version}</version>
+        <groupId>com.norconex.commons</groupId>
+        <artifactId>norconex-commons-lang</artifactId>
+        <version>${norconex-commons-lang.version}</version>
       </dependency>
       <dependency>
-          <groupId>com.norconex.commons</groupId>
-          <artifactId>norconex-commons-lang</artifactId>
-          <version>${norconex-commons-lang.version}</version>
-          <classifier>resources</classifier>
-          <type>zip</type>
-          <scope>provided</scope>
+        <groupId>com.norconex.commons</groupId>
+        <artifactId>norconex-commons-lang</artifactId>
+        <version>${norconex-commons-lang.version}</version>
+        <classifier>resources</classifier>
+        <type>zip</type>
+        <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>com.norconex.collectors</groupId>
@@ -267,6 +268,12 @@
         <groupId>org.slf4j</groupId>
         <artifactId>jcl-over-slf4j</artifactId>
         <version>${slf4j.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>${testcontainers.version}</version>
         <scope>test</scope>
       </dependency>
     </dependencies>
