@@ -6,6 +6,9 @@
     <author email="info@norconex.com">Norconex Inc.</author>
   </properties>
   <body>
+    <release version="1.0.0-RC1" date="2021-??-??" 
+            description="Changes since RC1.">
+    </release>
 
     <release version="1.0.0-RC1" date="2021-10-08" 
         description="Release Candidate 1.">
