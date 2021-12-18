@@ -57,7 +57,7 @@
     <xpath2.version>2.1.100</xpath2.version>
     <java-cup.version>10k</java-cup.version>
     <jackson.version>2.13.0</jackson.version>
-    <log4j.version>2.16.0</log4j.version>
+    <log4j.version>2.17.0</log4j.version>
     <ant.version>1.10.11</ant.version>
     <aws-java-sdk.version>1.12.78</aws-java-sdk.version>
     <httpclient5.version>5.1</httpclient5.version>
