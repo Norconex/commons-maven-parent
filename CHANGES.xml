@@ -6,24 +6,11 @@
     <author email="info@norconex.com">Norconex Inc.</author>
   </properties>
   <body>
-    <release version="1.0.0-RC1" date="2021-??-??" 
-            description="Changes since RC1.">
-    </release>
-
-    <release version="1.0.0-RC1" date="2021-10-08" 
-        description="Release Candidate 1.">
-      <action dev="essiembre" type="update">
-        Maven managed dependency updates/additions: Apache Commons Lang 3.12.0, 
-        Apache Commons IO 2.11.0, Apache Velocity Engine 2.3, 
-        Apache HTTP Client 5.1, SLF4j 1.7.32, Jackson 2.13.0, Log4J 2.14.1, 
-        AWS Java SDK 1.12.78, Picocli 4.6.1, JUnit 5.8.1, Testcontainers 1.16.0.
-      </action>
-    </release>
-
-    <release version="1.0.0-M2" date="2021-07-28"
-             description="Milestone release.">
+    <release version="1.0.0" date="2022-01-01" 
+            description="General Availability release.">
       <action dev="essiembre" type="add">
-        Second milestone release.
+        Initial release.  Holds managed dependencies for Norconex
+        open-source projects.
       </action>
     </release>
 
