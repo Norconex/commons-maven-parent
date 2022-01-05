@@ -485,7 +485,7 @@
               <link>https://opensource.norconex.com/commons/lang/v2/apidocs</link>
               <link>https://opensource.norconex.com/importer/v3/apidocs</link>
               <link>https://opensource.norconex.com/committers/core/v3/apidocs</link>
-              <link>https://opensource.norconex.com/collectors/core/v2/apidocs</link>
+              <link>https://opensource.norconex.com/crawlers/core/v2/apidocs</link>
 
               <!-- Regular dependencies -->
               <link>https://commons.apache.org/proper/commons-lang/javadocs/api-release</link>
