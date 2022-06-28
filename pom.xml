@@ -33,7 +33,7 @@
     <!-- Norconex dependencies -->
     <norconex-collector-core.version>2.0.1-SNAPSHOT</norconex-collector-core.version>
     <norconex-committer-core.version>3.0.0</norconex-committer-core.version>
-    <norconex-commons-lang.version>2.0.0</norconex-commons-lang.version>
+    <norconex-commons-lang.version>2.0.1-SNAPSHOT</norconex-commons-lang.version>
     <norconex-importer.version>3.0.0</norconex-importer.version>
 
     <!-- Apache Commons dependencies -->
@@ -740,4 +740,18 @@
   <modules>
     <module>javadoc-resources</module>
   </modules>
+<!--  
+  <profiles>
+    <profile>
+      <id>jdk9+</id>
+      <activation>
+        <jdk>[9,)</jdk>
+      </activation>
+      <properties>
+        <jvm9ArgsTests>-X-add-opens java.base/java.time=ALL-UNNAMED</jvm9ArgsTests>
+        <jvm9ArgsTests>-X-add-opens java.base/java.lang=ALL-UNNAMED -X-add-opens java.base/java.math=ALL-UNNAMED -X-add-opens java.base/java.io=ALL-UNNAMED -X-add-opens java.base/java.util=ALL-UNNAMED -X-add-opens java.base/java.text=ALL-UNNAMED -X-add-opens java.base/java.util.regex=ALL-UNNAMED -X-add-opens java.base/java.nio.channels.spi=ALL-UNNAMED -X-add-opens java.base/sun.nio.ch=ALL-UNNAMED -X-add-opens java.base/java.net=ALL-UNNAMED -X-add-opens java.base/java.util.concurrent=ALL-UNNAMED -X-add-opens java.base/sun.nio.fs=ALL-UNNAMED -X-add-opens java.base/sun.nio.cs=ALL-UNNAMED -X-add-opens java.base/java.nio.file=ALL-UNNAMED -X-add-opens java.base/java.nio.charset=ALL-UNNAMED</jvm9ArgsTests>
+      </properties>
+    </profile>
+  </profiles>
+-->
 </project>

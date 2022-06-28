@@ -6,6 +6,14 @@
     <author email="info@norconex.com">Norconex Inc.</author>
   </properties>
   <body>
+
+    <release version="1.0.1-SNAPSHOT" date="2022-??-??" 
+            description="Dependency updates.">
+      <action dev="essiembre" type="update">
+        Various dependency updates.
+      </action>
+    </release>
+
     <release version="1.0.0" date="2022-01-01" 
             description="General Availability release.">
       <action dev="essiembre" type="add">
