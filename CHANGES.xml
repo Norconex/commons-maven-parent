@@ -7,6 +7,14 @@
   </properties>
   <body>
 
+    <release version="1.0.2-SNAPSHOT" date="2023-??-??" 
+            description="Dependency updates.">
+      <action dev="essiembre" type="update">
+        Maven dependency updates: commons-text 1.10.0, 
+        jackson-* 2.13.5. 
+      </action>
+    </release>
+
     <release version="1.0.1" date="2022-08-29" 
             description="Dependency updates.">
       <action dev="essiembre" type="update">
