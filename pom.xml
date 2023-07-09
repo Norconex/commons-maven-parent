@@ -19,7 +19,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.norconex.commons</groupId>
   <artifactId>norconex-commons-maven-parent</artifactId>
-  <version>1.0.2-SNAPSHOT</version>
+  <version>1.0.2</version>
   <packaging>pom</packaging>
   <name>Norconex Commons Maven Parent</name>
 
@@ -31,10 +31,10 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
     <!-- Norconex dependencies -->
-    <norconex-collector-core.version>2.0.2-SNAPSHOT</norconex-collector-core.version>
+    <norconex-collector-core.version>2.0.2</norconex-collector-core.version>
     <norconex-committer-core.version>3.0.0</norconex-committer-core.version>
-    <norconex-commons-lang.version>2.0.1</norconex-commons-lang.version>
-    <norconex-importer.version>3.0.0</norconex-importer.version>
+    <norconex-commons-lang.version>2.0.2</norconex-commons-lang.version>
+    <norconex-importer.version>3.0.1</norconex-importer.version>
 
     <!-- Apache Commons dependencies -->
     <commons-cli.version>1.4</commons-cli.version>
