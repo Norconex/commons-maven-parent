@@ -19,22 +19,22 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.norconex.commons</groupId>
   <artifactId>norconex-commons-maven-parent</artifactId>
-  <version>1.0.2</version>
+  <version>1.1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Norconex Commons Maven Parent</name>
 
   <properties>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-	<java.version>1.8</java.version>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+    <java.version>11</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
     <!-- Norconex dependencies -->
-    <norconex-collector-core.version>2.0.2</norconex-collector-core.version>
+    <norconex-collector-core.version>2.1.0-SNAPSHOT</norconex-collector-core.version>
     <norconex-committer-core.version>3.0.0</norconex-committer-core.version>
-    <norconex-commons-lang.version>2.0.2</norconex-commons-lang.version>
-    <norconex-importer.version>3.0.1</norconex-importer.version>
+    <norconex-commons-lang.version>2.1.0-SNAPSHOT</norconex-commons-lang.version>
+    <norconex-importer.version>3.1.0-SNAPSHOT</norconex-importer.version>
 
     <!-- Apache Commons dependencies -->
     <commons-cli.version>1.4</commons-cli.version>
@@ -42,7 +42,7 @@
     <commons-collections4.version>4.4</commons-collections4.version>
     <commons-csv.version>1.9.0</commons-csv.version>
     <commons-io.version>2.11.0</commons-io.version>
-    <commons-lang3.version>3.12.0</commons-lang3.version>
+    <commons-lang3.version>3.17.0</commons-lang3.version>
     <commons-logging.version>1.2</commons-logging.version>
     <commons-text.version>1.10.0</commons-text.version>
     
@@ -65,6 +65,9 @@
     <!-- Test dependencies -->
     <junit-jupiter.version>5.8.1</junit-jupiter.version>
     <testcontainers.version>1.16.0</testcontainers.version>
+    
+    <!-- To make javadoc classpath more readable -->
+    <SEP>${path.separator}${project.build.directory}/lib/</SEP>
   </properties>
 
   <inceptionYear>2019</inceptionYear>
@@ -99,6 +102,12 @@
         <groupId>com.norconex.commons</groupId>
         <artifactId>norconex-commons-lang</artifactId>
         <version>${norconex-commons-lang.version}</version>
+        <exclusions>
+          <exclusion>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+          </exclusion>
+        </exclusions>
       </dependency>
       <dependency>
         <groupId>com.norconex.commons</groupId>
@@ -354,37 +363,6 @@
     <pluginManagement>
       <plugins>
 
-        <!-- This is only required to avoid false warnings in Eclipse:
-             https://stackoverflow.com/questions/23908837/
-             apache-camel-maven-remote-resources-plugin-goal-process-is-
-             ignored-by-m2e
-           -->
-        <plugin>
-          <groupId>org.eclipse.m2e</groupId>
-          <artifactId>lifecycle-mapping</artifactId>
-          <version>1.0.0</version>
-          <configuration>
-            <lifecycleMappingMetadata>
-              <pluginExecutions>
-                <pluginExecution>
-                  <pluginExecutionFilter>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-remote-resources-plugin</artifactId>
-                    <versionRange>[1.0,)</versionRange>
-                    <goals>
-                        <goal>process</goal>
-                    </goals>
-                  </pluginExecutionFilter>
-                  <action>
-                    <ignore>
-                    </ignore>
-                  </action>
-                </pluginExecution>
-              </pluginExecutions>
-            </lifecycleMappingMetadata>
-          </configuration>
-        </plugin>
-
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
@@ -428,12 +406,43 @@
 
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>3.1.2</version>
+          <executions>
+            <execution>
+              <id>copy-dependencies</id>
+              <phase>validate</phase>
+              <goals>
+                <goal>copy-dependencies</goal>
+              </goals>
+              <configuration>
+                <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                <includeScope>test</includeScope>
+                <includeArtifactIds>
+                  slf4j-api,log4j-core,log4j-slf4j-impl,log4j-api,json,
+                  commons-lang3,commons-io,commons-collections4,commons-text
+                </includeArtifactIds>
+              </configuration>
+            </execution>
+          </executions>
+          <inherited>true</inherited>
+        </plugin>
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
-          <version>3.2.0</version>
+          <version>3.10.0</version>
           <configuration>
-            <reportOutputDirectory>${project.build.directory}/site</reportOutputDirectory>
-            <outputDirectory>${project.build.directory}/site/apidocs</outputDirectory>
-            <stylesheetfile>${project.build.directory}/site/apidocs/norconex-javadoc.css</stylesheetfile>
+            <encoding>${project.build.sourceEncoding}</encoding>
+            <outputDirectory>${project.build.directory}/site</outputDirectory>
+            <packagesheader>${project.name} API</packagesheader>
+            <overview>src/main/javadoc/overview.html</overview>
+            <top><![CDATA[
+              <script src="{@docRoot}/prism.js" type="text/javascript"></script>
+              <link href="{@docRoot}/prism.css" rel="stylesheet" type="text/css">
+              <link href="{@docRoot}/norconex-javadoc.css" rel="stylesheet" type="text/css">
+            ]]>
+            </top>
             <resourcesArtifacts>
               <resourcesArtifact>
                 <groupId>com.norconex.commons</groupId>
@@ -441,34 +450,10 @@
                 <version>${project.parent.version}</version>
               </resourcesArtifact>
             </resourcesArtifacts>
-            <additionalJOptions>
-              <additionalJOption>&#45;&#45;allow-script-in-comments</additionalJOption>
-              <additionalJOption>-J-Dbasedir=${basedir}</additionalJOption>
-            </additionalJOptions>
-            <overview>src/main/javadoc/overview.html</overview>
-            <packagesheader>${project.name} API</packagesheader>
-            <top><![CDATA[
-              <script src="{@docRoot}/jquery-3.3.1.min.js" type="text/javascript"></script>
-              <script src="{@docRoot}/bootstrap.bundle.min.js" type="text/javascript"></script>
-              <script src="{@docRoot}/prism.js" type="text/javascript"></script>
-              <link href="{@docRoot}/bootstrap.min.css" rel="stylesheet" type="text/css">
-              <link href="{@docRoot}/prism.css" rel="stylesheet" type="text/css">
-              <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
-            ]]>
-            </top>
-            <header><![CDATA[
-              <div id="pom" class="d-none"
-                   data-doc-root="{@docRoot}"
-                   data-project-name="${project.name}"
-                   data-project-url="${project.url}"
-                   data-project-version="${project.version}"></div>
-            ]]>
-            </header>
             <footer><![CDATA[
               <a style="font-size: 1.4em;" href="${project.issueManagement.url}">Submit an Issue</a>
               &nbsp;&nbsp;|&nbsp;&nbsp; 
               <a style="font-size: 1.4em;" href="https://norconex.com">norconex.com</a>
-              <script src="{@docRoot}/norconex-javadoc.js" type="text/javascript"></script>
             ]]>
             </footer>
             <show>protected</show>
@@ -502,31 +487,30 @@
 
               <!-- Test dependencies -->
               <link>https://junit.org/junit5/docs/${junit-jupiter.version}/api</link>
-              <link>https://logging.apache.org/log4j/2.x/log4j-api/apidocs</link>
+              <link>https://logging.apache.org/log4j/2.x/javadoc/log4j-api</link>
               <link>https://ant.apache.org/manual/api</link>
             </links>
-            
-            <!-- For IncludeTaglet to work on external source files, the 
-                 "-sources.jar" artifact must be present in local Maven 
-                 repository or needs to be explicitly added as a JavaDoc
-                 additional dependency. 
-                 -->
-            <taglets>
-              <taglet><tagletClass>com.norconex.commons.lang.javadoc.IncludeTaglet</tagletClass></taglet>
-              <taglet><tagletClass>com.norconex.commons.lang.javadoc.XMLTaglet</tagletClass></taglet>
-              <taglet><tagletClass>com.norconex.commons.lang.javadoc.XMLUsageTaglet</tagletClass></taglet>
-              <taglet><tagletClass>com.norconex.commons.lang.javadoc.XMLExampleTaglet</tagletClass></taglet>
-              <taglet><tagletClass>com.norconex.commons.lang.javadoc.BlockTaglet</tagletClass></taglet>
-              <taglet><tagletClass>com.norconex.commons.lang.javadoc.HTMLTaglet</tagletClass></taglet>
-              <taglet><tagletClass>com.norconex.commons.lang.javadoc.JSONTaglet</tagletClass></taglet>
-            </taglets>
-            <tagletArtifacts>
-              <tagletArtifact>
-                <groupId>com.norconex.commons</groupId>
-                <artifactId>norconex-commons-lang</artifactId>
-                <version>${norconex-commons-lang.version}</version>
-              </tagletArtifact>
-            </tagletArtifacts>
+
+            <additionalJOptions>
+              <additionalJOption>&#45;&#45;allow-script-in-comments</additionalJOption>
+              <additionalJOption>-J-Dbasedir=${basedir}</additionalJOption>
+              <additionalJOption>-taglet</additionalJOption>
+              <additionalJOption>com.norconex.commons.lang.javadoc.IncludeTaglet</additionalJOption>
+              <additionalJOption>-taglet</additionalJOption>
+              <additionalJOption>com.norconex.commons.lang.javadoc.XMLTaglet</additionalJOption>
+              <additionalJOption>-taglet</additionalJOption>
+              <additionalJOption>com.norconex.commons.lang.javadoc.XMLUsageTaglet</additionalJOption>
+              <additionalJOption>-taglet</additionalJOption>
+              <additionalJOption>com.norconex.commons.lang.javadoc.XMLExampleTaglet</additionalJOption>
+              <additionalJOption>-taglet</additionalJOption>
+              <additionalJOption>com.norconex.commons.lang.javadoc.BlockTaglet</additionalJOption>
+              <additionalJOption>-taglet</additionalJOption>
+              <additionalJOption>com.norconex.commons.lang.javadoc.HTMLTaglet</additionalJOption>
+              <additionalJOption>-taglet</additionalJOption>
+              <additionalJOption>com.norconex.commons.lang.javadoc.JSONTaglet</additionalJOption>
+              <additionalJOption>-tagletpath</additionalJOption>
+              <additionalJOption>${project.build.outputDirectory}${SEP}slf4j-api-${slf4j.version}.jar${SEP}log4j-slf4j-impl-${log4j.version}.jar${SEP}json-${json.version}.jar${SEP}log4j-api-${log4j.version}.jar${SEP}commons-lang3-${commons-lang3.version}.jar${SEP}commons-io-${commons-io.version}.jar${SEP}commons-collections4-${commons-collections4.version}.jar${SEP}commons-text-${commons-text.version}.jar${SEP}log4j-core-${log4j.version}.jar</additionalJOption>
+            </additionalJOptions>
           </configuration>
           <executions>
             <execution>
@@ -583,8 +567,15 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-surefire-plugin</artifactId>
-          <version>3.0.0-M5</version>
-        </plugin>
+          <version>3.2.5</version>
+          <configuration>
+            <argLine>
+              --add-opens=java.base/java.util=ALL-UNNAMED
+              --add-opens=java.base/java.lang=ALL-UNNAMED
+            </argLine>
+          </configuration>
+          <inherited>true</inherited>
+        </plugin>        
 
         <!-- https://www.mojohaus.org/license-maven-plugin/ -->
         <plugin>
@@ -599,15 +590,6 @@
               </goals>
               <phase>generate-resources</phase>
             </execution>
-            <!-- NOT NEEDED: listing available in licenses.xml sufficient?
-            <execution>
-              <id>create-license-list</id>
-              <goals>
-                <goal>add-third-party</goal>
-              </goals>
-              <phase>generate-resources</phase>
-            </execution>
-             -->
           </executions>
           <inherited>true</inherited>
         </plugin>
@@ -651,12 +633,6 @@
 
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-dependency-plugin</artifactId>
-          <version>3.1.1</version>
-        </plugin>
-        
-        <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
           <version>3.9.1</version>
           <dependencies>
@@ -668,14 +644,7 @@
           </dependencies>
           <inherited>true</inherited>
         </plugin>        
-        
-<!-- 
-        <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>sonar-maven-plugin</artifactId>
-          <version>2.6</version>
-        </plugin>
- -->
+
       </plugins>
     </pluginManagement>
 
@@ -689,7 +658,13 @@
       <plugin>
         <groupId>org.sonatype.plugins</groupId>
         <artifactId>nexus-staging-maven-plugin</artifactId>
-      </plugin>    
+      </plugin>
+      
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+      </plugin>
+          
     </plugins>
 
   </build>
@@ -740,18 +715,4 @@
   <modules>
     <module>javadoc-resources</module>
   </modules>
-<!--  
-  <profiles>
-    <profile>
-      <id>jdk9+</id>
-      <activation>
-        <jdk>[9,)</jdk>
-      </activation>
-      <properties>
-        <jvm9ArgsTests>-X-add-opens java.base/java.time=ALL-UNNAMED</jvm9ArgsTests>
-        <jvm9ArgsTests>-X-add-opens java.base/java.lang=ALL-UNNAMED -X-add-opens java.base/java.math=ALL-UNNAMED -X-add-opens java.base/java.io=ALL-UNNAMED -X-add-opens java.base/java.util=ALL-UNNAMED -X-add-opens java.base/java.text=ALL-UNNAMED -X-add-opens java.base/java.util.regex=ALL-UNNAMED -X-add-opens java.base/java.nio.channels.spi=ALL-UNNAMED -X-add-opens java.base/sun.nio.ch=ALL-UNNAMED -X-add-opens java.base/java.net=ALL-UNNAMED -X-add-opens java.base/java.util.concurrent=ALL-UNNAMED -X-add-opens java.base/sun.nio.fs=ALL-UNNAMED -X-add-opens java.base/sun.nio.cs=ALL-UNNAMED -X-add-opens java.base/java.nio.file=ALL-UNNAMED -X-add-opens java.base/java.nio.charset=ALL-UNNAMED</jvm9ArgsTests>
-      </properties>
-    </profile>
-  </profiles>
--->
 </project>

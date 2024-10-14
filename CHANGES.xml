@@ -7,6 +7,15 @@
   </properties>
   <body>
 
+    <release version="1.1.0" date="2024-10-11" description="Minor release.">
+      <action dev="essiembre" type="update">
+        Minimum Java Version is now 11.
+      </action>
+      <action dev="essiembre" type="update">
+        Updated javadoc resources to better match Java 11 Javadoc style.
+      </action>
+    </release>
+
     <release version="1.0.2" date="2023-07-09" 
             description="Dependency updates.">
       <action dev="essiembre" type="update">

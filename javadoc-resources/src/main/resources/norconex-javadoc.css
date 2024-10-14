@@ -1,4 +1,4 @@
-/* Copyright 2019-2020 Norconex Inc.
+/* Copyright 2019-2024 Norconex Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,356 +12,67 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-:root {
-  --icon-annotation: url('icon-annotation.svg');
-  --icon-class: url('icon-class.svg');
-  --icon-enum: url('icon-enum.svg');
-  --icon-exception: url('icon-exception.svg');
-  --icon-interface: url('icon-interface.svg');
-  --icon-method: url('icon-method.svg');
-  --icon-package: url('icon-package.svg');
-  --icon-allclasses: url('icon-allclasses.svg');
-}
-
-
-/*
-================================================================================
-   FRAMES: ALL
-================================================================================
-*/
-body {
-    margin: 0px;
-}
-
-
-/*
-================================================================================
-   FRAMES: PACKAGES and CLASSES
-================================================================================
-*/
-
-/* Default font family and padding */
-body > h1.bar,
-body > .indexHeader,
-body > .indexContainer {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+body .indexContainer {
     padding-left: 5px;
     padding-right: 5px;
 }
-
-/* Links style */
-body > h1.bar a,
-body > .indexHeader a,
-body > .indexContainer a {
-    color: #007bff;
-    text-decoration: none;
-    background-color: transparent;
+body a:hover {
+    text-decoration: underline !important;
 }
-body > h1.bar a:hover,
-body > .indexHeader a:hover,
-body > .indexContainer a:hover {
-    color: #0056b3;
-    text-decoration: underline;
+body p a {
+    color: #007bff !important;
 }
-
-/* List style */
-body > .indexContainer > ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
+body p a:hover {
+    color: #0056b3 !important;
 }
-body > .indexContainer > ul > li {
-    white-space: nowrap;
+body .contentContainer .block,
+body .contentContainer .blockList,
+body .contentContainer dd,
+body .contentContainer p {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji" !important;
+    font-size: 1.05rem;
 }
 
-/* Headings */
-body > h1.bar {
-    box-sizing: border-box;
-    font-size: 1.0rem !important;
-    line-height: 1.2;
-    background-color: #f8f9fa;
-/*     background-color: #007bff!important; */
-/*     color: #fff; */
-    border-bottom: 1px solid #dee2e6;
-    padding-top: 3px;
-    padding-bottom: 3px;
-    font-weight: normal;
-    margin: 0px;
-}
-body > .indexContainer h2 {
-    display: none;
-}
-
-/* Content */
-body > .indexHeader,
-body > .indexContainer {
-    font-size: 0.8em;
-}
-
-
-/*
-================================================================================
-   FRAME: PACKAGES
-================================================================================
-Base selectors:
-   body > .indexHeader span a[target="packageFrame"]   // heading
-   body > .indexHeader + .indexContainer               // content
-*/
-
-/* All Classes icon */
-body > .indexHeader span a[target="packageFrame"]:before {
-    content: var(--icon-allclasses);
-    position: relative;
-    padding-right: 2px;
-    top: 3px;
-}
-
-/* Package icon */
-body > .indexHeader + .indexContainer > ul[title="Packages"] li:before {
-    content: var(--icon-package);
-    position: relative;
-    padding-right: 2px;
-    top: 3px;
-}
-
-
-/*
-================================================================================
-   FRAME: CLASSES
-================================================================================
-Base selectors:
-   body > h1.bar > a[target="classFrame"]      // heading
-   body > h1.bar + .indexContainer               // content
-*/
-
-/* Heading bar */
-body > h1.bar > a[target="classFrame"] {
-    white-space: nowrap;
-}
-body > h1.bar > a[target="classFrame"]:before {
-    content: var(--icon-package);
-    position: relative;
-    padding-right: 2px;
-    top: 3px;
-}
-
-/* Class icon */
-body > h1.bar + .indexContainer > ul li a[title^="class in"]:before {
-    content: var(--icon-class);
-    position: relative;
-    padding-right: 2px;
-    top: 3px;
-}
-/* Interface icon */
-body > h1.bar + .indexContainer > ul li a[title^="interface in"]:before {
-    content: var(--icon-interface);
-    position: relative;
-    padding-left: 1px;
-    padding-right: 1px;
-    top: 5px;
-}
-/* Enum icon */
-body > h1.bar + .indexContainer > ul li a[title^="enum in"]:before {
-    content: var(--icon-enum);
-    position: relative;
-    padding-left: 1px;
-    padding-right: 1px;
-    top:5px;
-}
-
-
-/*
-================================================================================
-   FRAME: MAIN
-================================================================================
-Base selectors:
-    body > .header                // header
-    body > .contentContainer      // content
-*/
-
-
-#detailsPanel > h3,
-#summaryPanel > h3 {
-   font-size: 1.1rem;
-   font-weight: bold;
-}
-.skipNav {
-    position:absolute;
-    top:auto;
-    left:-9999px;
-    overflow:hidden;
-}
-
-#navbarActions a.btn-primary {
-    border: 1px solid #ddddff;
-}
-
-#classDetails ul.inheritance li ul.inheritance:before {
-    content: '\f105';
-    font-weight: bold;
-    font-family: "Font Awesome 5 Free";
-}
-#classDetails ul.inheritance {
-    margin:0;
-    padding:0;
-    display: inline;
-}
-#classDetails ul.inheritance li {
-    display:inline;
-    list-style:none;
-}
-#classDetails {
-    font-size: 0.9em;
-}
-
-#classDesc pre {
-    font-family: SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
-    color: #408080;
-}
-
-body > .contentContainer code {
-    color: #408080;
-}
-body > .contentContainer .detailPanel > pre {
-    color: #408080;
-    font-weight: bold;
-}
-body > .contentContainer .detailPanel > pre + div.block {
-    margin-bottom: 1rem;
-}
-
-table caption {
-    caption-side: top;
-}
-
-/* Overview Package icon */
-table.overviewSummary tbody td > a:before {
-    content: var(--icon-package);
-    position: relative;
-    padding-right: 2px;
-    top: 3px;
-}
-
-table th.colFirst,
-table td.colFirst {
-    width: 25%;
-}
-
-body > .header > h1 > .titleHeading {
-    font-size: 1.4rem;
-}
-
-#pageTree .contentContainer {
-    font-size: 0.9em;
-}
-#pageDeprecated ul,
-#pageTree ul {
-    list-style: none;
-    padding-left: 1rem;
-}
-#pageDeprecated ul li,
-#pageTree ul li {
-    list-style: none;
-    padding-left: 0.2rem;
-}
-#pageTree .contentContainer .packageHierarchyLabel + ul li:before {
-    content: var(--icon-package);
-    position: relative;
-    padding-right: 2px;
-    top: 3px;
-}
-#pageTree .contentContainer h2[title="Class Hierarchy"] + ul li:before {
-    content: var(--icon-class);
-    position: relative;
-    padding-right: 2px;
-    top: 3px;
-}
-#pageTree .contentContainer h2[title="Interface Hierarchy"] + ul li:before {
-    content: var(--icon-interface);
-    position: relative;
-    padding-right: 2px;
-    top: 3px;
-}
-#pageTree .contentContainer h2[title="Enum Hierarchy"] + ul li:before {
-    content: var(--icon-enum);
-    position: relative;
-    padding-right: 2px;
-    top: 3px;
-}
-
-#pageDeprecated li a[href="#interface"]:before {
-    content: var(--icon-interface);
-    position: relative;
-    padding-right: 2px;
-    top: 3px;
-}
-#pageDeprecated li a[href="#class"]:before {
-    content: var(--icon-class);
-    position: relative;
-    padding-right: 2px;
-    top: 3px;
-}
-#pageDeprecated li a[href="#enum"]:before {
-    content: var(--icon-enum);
-    position: relative;
-    padding-right: 2px;
-    top: 3px;
-}
-#pageDeprecated li a[href="#method"]:before {
-    content: var(--icon-method);
-    position: relative;
-    padding-right: 2px;
-    top: 3px;
-}
-
-#pageIndex .contentContainer dl {
-    font-size: 0.9rem;
-}
-
-#pageOverview table.overviewSummary td {
-    white-space: nowrap;
-}
-
-/*
-================================================================================
-   PRISM CSS TWEAKS
-================================================================================
-*/
-
-#pageClass div.code-toolbar > .toolbar button {
-    color: #fff;
+body .topNav,
+body .bottomNav {
     background-color: #007bff;
-    border-color: #007bff;
-    border-style: solid;
-    border-width: 1px;
-    padding: .25rem .5rem;
-    font-size: .875rem;
-    line-height: 1.5;
-    border-radius: .2rem;
-    -webkit-box-shadow: none;
-    -moz-box-shadow: none;
-    box-shadow: none;
-    font-weight: 400;
-    margin-top: 3px;
-    margin-right: 3px;
-    padding: 4px 8px;
-    position: relative;
-    z-index: 1;
-}
-#pageClass div.code-toolbar > .toolbar button:before {
-    content: '\f328';
-    font-weight: bold;
-    font-family: "Font Awesome 5 Free";
-    margin-right: 4px;
-}
-#pageClass div.code-toolbar > .toolbar button:focus {
-    box-shadow: 0 0 0 .2rem rgba(38,143,255,.5);
 }
 
-#pageClass div.code-toolbar > .toolbar button:hover {
-    color: #fff;
-    background-color: #0069d9;
-    border-color: #0062cc;
+body .bottomNav .aboutLanguage {
+    margin-top: 5px;
 }
 
+
+body header nav .topNav .navList:before {
+    background-image: url("norconex-logo-white.png");
+    background-repeat: no-repeat;
+    background-size: 116px 24px;  
+    display: block;
+    width: 128px;
+    float: left;
+    margin-left: 5px;
+    content: "\00a0";
+    z-index: 9999;
+    padding-bottom: 10px;
+}
+
+#nx-xml-usage-heading {
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+#nx-xml-example-heading {
+    font-size: 1.2rem;
+    font-weight: normal;
+    font-weight: 600;
+}
+
+body .code-toolbar > .toolbar > .toolbar-item > button {
+    border-radius: 5px;
+    background-color: #007bff;
+    padding: 8px 16px;
+    text-transform: uppercase;
+    color: white;
+}
+body .code-toolbar > .toolbar > .toolbar-item > button:active {
+    background-color: #0056b3 !important;
+}
