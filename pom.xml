@@ -420,7 +420,8 @@
                 <includeScope>test</includeScope>
                 <includeArtifactIds>
                   slf4j-api,log4j-core,log4j-slf4j-impl,log4j-api,json,
-                  commons-lang3,commons-io,commons-collections4,commons-text
+                  commons-lang3,commons-io,commons-collections4,commons-text,
+                  norconex-commons-lang
                 </includeArtifactIds>
               </configuration>
             </execution>
@@ -509,7 +510,7 @@
               <additionalJOption>-taglet</additionalJOption>
               <additionalJOption>com.norconex.commons.lang.javadoc.JSONTaglet</additionalJOption>
               <additionalJOption>-tagletpath</additionalJOption>
-              <additionalJOption>${project.build.outputDirectory}${SEP}slf4j-api-${slf4j.version}.jar${SEP}log4j-slf4j-impl-${log4j.version}.jar${SEP}json-${json.version}.jar${SEP}log4j-api-${log4j.version}.jar${SEP}commons-lang3-${commons-lang3.version}.jar${SEP}commons-io-${commons-io.version}.jar${SEP}commons-collections4-${commons-collections4.version}.jar${SEP}commons-text-${commons-text.version}.jar${SEP}log4j-core-${log4j.version}.jar</additionalJOption>
+              <additionalJOption>${project.build.outputDirectory}${SEP}slf4j-api-${slf4j.version}.jar${SEP}log4j-slf4j-impl-${log4j.version}.jar${SEP}json-${json.version}.jar${SEP}log4j-api-${log4j.version}.jar${SEP}commons-lang3-${commons-lang3.version}.jar${SEP}commons-io-${commons-io.version}.jar${SEP}commons-collections4-${commons-collections4.version}.jar${SEP}commons-text-${commons-text.version}.jar${SEP}log4j-core-${log4j.version}.jar${SEP}norconex-commons-lang-${norconex-commons-lang.version}.jar</additionalJOption>
             </additionalJOptions>
           </configuration>
           <executions>
