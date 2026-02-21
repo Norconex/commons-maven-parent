@@ -19,29 +19,29 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.norconex.commons</groupId>
   <artifactId>norconex-commons-maven-parent</artifactId>
-  <version>1.1.0</version>
+  <version>1.2.0</version>
   <packaging>pom</packaging>
   <name>Norconex Commons Maven Parent</name>
 
   <properties>
-    <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>11</maven.compiler.target>
-    <java.version>11</java.version>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
+    <java.version>17</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
     <!-- Norconex dependencies -->
-    <norconex-collector-core.version>2.1.0</norconex-collector-core.version>
+    <norconex-collector-core.version>2.2.0</norconex-collector-core.version>
     <norconex-committer-core.version>3.0.0</norconex-committer-core.version>
-    <norconex-commons-lang.version>2.1.0</norconex-commons-lang.version>
-    <norconex-importer.version>3.1.0</norconex-importer.version>
+    <norconex-commons-lang.version>2.2.0</norconex-commons-lang.version>
+    <norconex-importer.version>3.2.0</norconex-importer.version>
 
     <!-- Apache Commons dependencies -->
     <commons-cli.version>1.4</commons-cli.version>
     <commons-codec.version>1.15</commons-codec.version>
     <commons-collections4.version>4.4</commons-collections4.version>
     <commons-csv.version>1.9.0</commons-csv.version>
-    <commons-io.version>2.11.0</commons-io.version>
+    <commons-io.version>2.14.0</commons-io.version>
     <commons-lang3.version>3.17.0</commons-lang3.version>
     <commons-logging.version>1.2</commons-logging.version>
     <commons-text.version>1.10.0</commons-text.version>
@@ -50,7 +50,7 @@
     <aws-java-sdk.version>1.12.78</aws-java-sdk.version>
     <ant.version>1.10.11</ant.version>
     <httpclient5.version>5.1</httpclient5.version>
-    <jackson.version>2.13.5</jackson.version>
+    <jackson.version>2.15.0</jackson.version>
     <jaxb-runtime.version>2.3.5</jaxb-runtime.version>
     <java-cup.version>10k</java-cup.version>
     <json.version>1.8</json.version>
@@ -64,7 +64,7 @@
 
     <!-- Test dependencies -->
     <junit-jupiter.version>5.8.1</junit-jupiter.version>
-    <testcontainers.version>1.16.0</testcontainers.version>
+    <testcontainers.version>2.0.2</testcontainers.version>
     
     <!-- To make javadoc classpath more readable -->
     <SEP>${path.separator}${project.build.directory}/lib/</SEP>
@@ -298,7 +298,7 @@
       </dependency>
       <dependency>
         <groupId>org.testcontainers</groupId>
-        <artifactId>junit-jupiter</artifactId>
+        <artifactId>testcontainers-junit-jupiter</artifactId>
         <version>${testcontainers.version}</version>
         <scope>test</scope>
       </dependency>
