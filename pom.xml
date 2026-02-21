@@ -31,10 +31,10 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
     <!-- Norconex dependencies -->
-    <norconex-committer-core.version>3.0.0</norconex-committer-core.version>
-<!--
-    <norconex-collector-core.version>2.2.0</norconex-collector-core.version>
     <norconex-commons-lang.version>2.2.0</norconex-commons-lang.version>
+<!--
+    <norconex-committer-core.version>3.0.0</norconex-committer-core.version>
+    <norconex-collector-core.version>2.2.0</norconex-collector-core.version>
     <norconex-importer.version>3.2.0</norconex-importer.version>
 -->
     <!-- Apache Commons dependencies -->
@@ -82,9 +82,9 @@
 
   <repositories>
     <repository>
-      <id>sonatype-oss-snapshots</id>
-      <name>Sonatype OSS Snapshot Repository</name>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <id>central-snapshots</id>
+      <name>Maven Central Snapshot Repository</name>
+      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
       <releases>
         <enabled>false</enabled>
       </releases>
@@ -118,6 +118,7 @@
         <type>zip</type>
         <scope>provided</scope>
       </dependency>
+<!--
       <dependency>
         <groupId>com.norconex.collectors</groupId>
         <artifactId>norconex-collector-core</artifactId>
@@ -133,6 +134,7 @@
         <artifactId>norconex-committer-core</artifactId>
         <version>${norconex-committer-core.version}</version>
       </dependency>
+-->
 
       <!-- Jackson dependencies -->
 
@@ -621,14 +623,13 @@
         </plugin>
 
         <plugin>
-          <groupId>org.sonatype.plugins</groupId>
-          <artifactId>nexus-staging-maven-plugin</artifactId>
-          <version>1.6.8</version>
+          <groupId>org.sonatype.central</groupId>
+          <artifactId>central-publishing-maven-plugin</artifactId>
+          <version>0.10.0</version>
           <extensions>true</extensions>
           <configuration>
-            <serverId>ossrh</serverId>
-            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-            <autoReleaseAfterClose>false</autoReleaseAfterClose>
+            <publishingServerId>central</publishingServerId>
+            <autoPublish>false</autoPublish>
           </configuration>
           <inherited>true</inherited>
         </plugin>
@@ -683,8 +684,8 @@
       </plugin>
 
       <plugin>
-        <groupId>org.sonatype.plugins</groupId>
-        <artifactId>nexus-staging-maven-plugin</artifactId>
+        <groupId>org.sonatype.central</groupId>
+        <artifactId>central-publishing-maven-plugin</artifactId>
       </plugin>
       
       <plugin>
@@ -698,12 +699,12 @@
 
   <distributionManagement>
     <snapshotRepository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+      <id>central</id>
+      <url>https://central.sonatype.com/repository/maven-snapshots/</url>
     </snapshotRepository>
     <repository>
-      <id>ossrh</id>
-      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+      <id>central</id>
+      <url>https://central.sonatype.com/</url>
     </repository>
   </distributionManagement>
   <organization>
