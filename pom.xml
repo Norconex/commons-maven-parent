@@ -55,7 +55,7 @@
     <jaxb-runtime.version>2.3.5</jaxb-runtime.version>
     <java-cup.version>10k</java-cup.version>
     <json.version>1.8</json.version>
-    <log4j.version>2.25.3</log4j.version>
+    <log4j.version>2.25.4</log4j.version>
     <picocli.version>4.7.7</picocli.version>
     <slf4j.version>2.0.17</slf4j.version>
     <velocity-engine.version>2.4.1</velocity-engine.version>
