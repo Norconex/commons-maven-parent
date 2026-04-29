@@ -50,7 +50,7 @@
     <!-- Other dependencies -->
     <aws-java-sdk.version>1.12.78</aws-java-sdk.version>
     <ant.version>1.10.11</ant.version>
-    <httpclient5.version>5.6</httpclient5.version>
+    <httpclient5.version>5.6.1</httpclient5.version>
     <jackson.version>2.18.4</jackson.version>
     <jaxb-runtime.version>2.3.5</jaxb-runtime.version>
     <java-cup.version>10k</java-cup.version>
