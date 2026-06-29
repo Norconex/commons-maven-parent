@@ -451,7 +451,7 @@
               <link>https://opensource.norconex.com/crawlers/core/v2/apidocs</link>
               <!-- Regular dependencies -->
               <link>https://commons.apache.org/proper/commons-lang/javadocs/api-release</link>
-              <link>https://commons.apache.org/proper/commons-collections/javadocs/api-${commons-collections4.version}</link>
+              <link>https://commons.apache.org/proper/commons-collections/apidocs</link>
               <link>https://commons.apache.org/proper/commons-io/javadocs/api-release</link>
               <link>https://commons.apache.org/proper/commons-text/apidocs</link>
               <link>https://commons.apache.org/proper/commons-cli/javadocs/api-release</link>
