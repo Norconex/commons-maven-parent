@@ -425,7 +425,7 @@
             ]]></top>
             <resourcesArtifacts>
               <resourcesArtifact>
-                <groupId>com.norconex.commons</groupId>
+                <groupId>com.norconex.collectors.v3</groupId>
                 <artifactId>javadoc-resources</artifactId>
                 <version>${project.parent.version}</version>
               </resourcesArtifact>
