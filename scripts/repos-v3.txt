@@ -1,0 +1,16 @@
+# One repository name per line. These folders are created as siblings of commons-maven-parent.
+# Edit this file to add/remove v3 modules to clone.
+commons-maven-parent
+importer
+collector-core
+collector-http
+collector-filesystem
+committer-core
+committer-elasticsearch
+committer-googlecloudsearch
+committer-cloudsearch
+committer-solr
+committer-idol
+committer-azuresearch
+committer-neo4j
+committer-sql
