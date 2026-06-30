@@ -105,23 +105,7 @@
         <type>zip</type>
         <scope>provided</scope>
       </dependency>
-      <!--
-      <dependency>
-        <groupId>com.norconex.collectors</groupId>
-        <artifactId>norconex-collector-core</artifactId>
-        <version>${norconex-collector-core.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.norconex.collectors</groupId>
-        <artifactId>norconex-importer</artifactId>
-        <version>${norconex-importer.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>com.norconex.collectors</groupId>
-        <artifactId>norconex-committer-core</artifactId>
-        <version>${norconex-committer-core.version}</version>
-      </dependency>
--->
+
       <!-- Jackson dependencies -->
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
@@ -430,11 +414,11 @@
                 <version>${project.parent.version}</version>
               </resourcesArtifact>
             </resourcesArtifacts>
-            <footer><![CDATA[
+            <bottom><![CDATA[
               <a style="font-size: 1.4em;" href="${project.issueManagement.url}">Submit an Issue</a>
               &nbsp;&nbsp;|&nbsp;&nbsp; 
               <a style="font-size: 1.4em;" href="https://norconex.com">norconex.com</a>
-            ]]></footer>
+            ]]></bottom>
             <show>protected</show>
             <nodeprecated>false</nodeprecated>
             <source>${maven.compiler.source}</source>
@@ -459,10 +443,10 @@
               <link>https://picocli.info/apidocs</link>
               <link>https://velocity.apache.org/engine/${velocity-engine.version}/apidocs</link>
               <link>https://www.slf4j.org/apidocs</link>
-              <link>https://javadoc.io/doc/com.tdunning/json/latest</link>
+              <link>https://javadoc.io/doc/com.tdunning/json/1.8</link>
               <!-- Missing: xerces (1.1 schema), xpath2, java-cup, jackson/fasterxml -->
               <!-- Test dependencies -->
-              <link>https://junit.org/junit5/docs/${junit-jupiter.version}/api</link>
+              <link>https://docs.junit.org/${junit-jupiter.version}/api</link>
               <link>https://logging.apache.org/log4j/2.x/javadoc/log4j-api</link>
               <link>https://ant.apache.org/manual/api</link>
             </links>
