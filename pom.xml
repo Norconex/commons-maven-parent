@@ -28,11 +28,6 @@
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <!-- Norconex dependencies -->
     <norconex-commons-lang.version>2.2.1-SNAPSHOT</norconex-commons-lang.version>
-    <!--
-    <norconex-committer-core.version>3.0.0</norconex-committer-core.version>
-    <norconex-collector-core.version>2.2.0</norconex-collector-core.version>
-    <norconex-importer.version>3.2.0</norconex-importer.version>
--->
     <!-- Apache Commons dependencies -->
     <commons-cli.version>1.11.0</commons-cli.version>
     <commons-codec.version>1.21.0</commons-codec.version>
@@ -104,6 +99,21 @@
         <classifier>resources</classifier>
         <type>zip</type>
         <scope>provided</scope>
+      </dependency>
+      <dependency>
+        <groupId>com.norconex.collectors.v3</groupId>
+        <artifactId>norconex-collector-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.norconex.collectors.v3</groupId>
+        <artifactId>norconex-committer-core</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>com.norconex.collectors.v3</groupId>
+        <artifactId>norconex-importer</artifactId>
+        <version>${project.version}</version>
       </dependency>
 
       <!-- Jackson dependencies -->
