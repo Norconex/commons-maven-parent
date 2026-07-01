@@ -73,16 +73,18 @@ if "%COMMIT_MESSAGE%"=="" (
 set "DIRTY_REPOS="
 for /f "usebackq tokens=* delims=" %%L in ("%REPO_LIST_FILE%") do (
   set "line=%%L"
-  for /f "tokens=1 delims=#" %%A in ("!line!") do set "line=%%A"
   for /f "tokens=* delims= " %%A in ("!line!") do set "line=%%A"
-  if not "!line!"=="" (
+  if not "!line!"=="" if not "!line:~0,1!"=="#" (
     set "repo=!line!"
     set "TARGET_DIR=%WORKSPACE_ROOT%\!repo!"
     if exist "!TARGET_DIR!\.git" (
-      for /f %%S in ('"%GIT_EXE%" -C "!TARGET_DIR!" status --porcelain ^| find /c /v ""') do set "DIRTY_COUNT=%%S"
-      if not "!DIRTY_COUNT!"=="0" (
+      set "STATUS_FILE=%TEMP%\commit-push-v3-!repo!-!RANDOM!.txt"
+      "%GIT_EXE%" -C "!TARGET_DIR!" status --porcelain > "!STATUS_FILE!"
+      for %%Z in ("!STATUS_FILE!") do set "STATUS_SIZE=%%~zZ"
+      if not "!STATUS_SIZE!"=="0" (
         set "DIRTY_REPOS=!DIRTY_REPOS! !repo!"
       )
+      del /q "!STATUS_FILE!" >nul 2>nul
     ) else (
       echo [skip] !repo!: not a git repository at !TARGET_DIR!
     )
@@ -102,7 +104,7 @@ for %%R in (%DIRTY_REPOS%) do echo   - %%R
 
 if not "%AUTO_YES%"=="1" (
   set /p "CONFIRM=Proceed with commit and push? [y/N] "
-  if /I not "%CONFIRM%"=="y" if /I not "%CONFIRM%"=="yes" (
+  if /I not "!CONFIRM!"=="y" if /I not "!CONFIRM!"=="yes" (
     echo Aborted.
     exit /b 1
   )
