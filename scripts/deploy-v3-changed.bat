@@ -141,9 +141,12 @@ if not exist "%POM%" (
 set "GROUP_ID="
 set "ARTIFACT_ID="
 set "LOCAL_VERSION="
-for /f "usebackq delims=" %%I in (`"%MVN_EXE%" -q -f "%POM%" -DforceStdout help:evaluate -Dexpression^=project.groupId`) do set "GROUP_ID=%%I"
-for /f "usebackq delims=" %%I in (`"%MVN_EXE%" -q -f "%POM%" -DforceStdout help:evaluate -Dexpression^=project.artifactId`) do set "ARTIFACT_ID=%%I"
-for /f "usebackq delims=" %%I in (`"%MVN_EXE%" -q -f "%POM%" -DforceStdout help:evaluate -Dexpression^=project.version`) do set "LOCAL_VERSION=%%I"
+call :mvn_eval "%POM%" project.groupId GROUP_ID
+if errorlevel 1 exit /b 1
+call :mvn_eval "%POM%" project.artifactId ARTIFACT_ID
+if errorlevel 1 exit /b 1
+call :mvn_eval "%POM%" project.version LOCAL_VERSION
+if errorlevel 1 exit /b 1
 
 if "%GROUP_ID%"=="" (
   echo ERROR: Could not resolve project.groupId for %MODULE%
@@ -160,7 +163,7 @@ for %%R in (%RELEASE_REPOS%) do (
   set "META_FILE=%TEMP%\deploy-v3-meta-%RANDOM%.xml"
   curl -fsSL "%%R/%GROUP_PATH%/%ARTIFACT_ID%/maven-metadata.xml" -o "!META_FILE!" >nul 2>nul
   if not errorlevel 1 (
-    for /f "tokens=2 delims=<>"> %%V in ('findstr /R /C:"<release>.*</release>" "!META_FILE!"') do set "LATEST_RELEASE=%%V"
+    for /f "tokens=2 delims=<>" %%V in ('findstr /R /C:"<release>.*</release>" "!META_FILE!"') do set "LATEST_RELEASE=%%V"
   )
   del "!META_FILE!" >nul 2>nul
   if not "!LATEST_RELEASE!"=="" goto metadata_found
@@ -203,6 +206,29 @@ if "!LATEST_RELEASE!"=="" (
 
 if "!CHANGED!"=="1" set "CHANGED_MODULES=%CHANGED_MODULES% %MODULE%"
 echo %MODULE% ^| %ARTIFACT_ID% ^| %LOCAL_VERSION% ^| !LATEST_RELEASE! ^| !CHANGED! ^| !REASON!
+exit /b 0
+
+:mvn_eval
+set "MVN_POM=%~1"
+set "MVN_EXPR=%~2"
+set "MVN_OUTVAR=%~3"
+set "MVN_TMP=%TEMP%\deploy-v3-eval-%RANDOM%.txt"
+call "%MVN_EXE%" -q -f "%MVN_POM%" -DforceStdout help:evaluate -Dexpression=%MVN_EXPR% > "%MVN_TMP%" 2>nul
+if errorlevel 1 (
+  del "%MVN_TMP%" >nul 2>nul
+  echo ERROR: Maven evaluation failed for expression %MVN_EXPR% on %MVN_POM%
+  exit /b 1
+)
+set "MVN_VALUE="
+for /f "usebackq delims=" %%L in ("%MVN_TMP%") do (
+  if not "%%L"=="" set "MVN_VALUE=%%L"
+)
+del "%MVN_TMP%" >nul 2>nul
+if "%MVN_VALUE%"=="" (
+  echo ERROR: Empty Maven evaluation result for expression %MVN_EXPR% on %MVN_POM%
+  exit /b 1
+)
+set "%MVN_OUTVAR%=%MVN_VALUE%"
 exit /b 0
 
 :resolve_tag
