@@ -59,7 +59,7 @@ goto usage
 if "%INCLUDE_SQL%"=="1" set "MODULES=%MODULES% committer-sql"
 
 if /i "%MVN_EXE%"=="mvn" (
-  where mvn >nul 2>nul
+  mvn -v >nul 2>nul
   if errorlevel 1 (
     echo ERROR: mvn is required but was not found in PATH.
     echo Hint: set MVN_EXE to full path, e.g. C:\apps\apache-maven-3.9.9\bin\mvn.cmd
@@ -72,13 +72,13 @@ if /i "%MVN_EXE%"=="mvn" (
   )
 )
 
-where git >nul 2>nul
+git --version >nul 2>nul
 if errorlevel 1 (
   echo ERROR: git is required but was not found in PATH.
   exit /b 1
 )
 
-where curl >nul 2>nul
+curl --version >nul 2>nul
 if errorlevel 1 (
   echo ERROR: curl is required but was not found in PATH.
   exit /b 1
