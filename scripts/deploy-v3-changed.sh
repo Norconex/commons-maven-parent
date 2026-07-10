@@ -129,6 +129,69 @@ get_latest_release() {
 
 CHANGED_MODULES=()
 
+depends_on() {
+  case "$1" in
+    commons-maven-parent) echo "" ;;
+    committer-core) echo "commons-maven-parent" ;;
+    importer) echo "commons-maven-parent committer-core" ;;
+    collector-core) echo "commons-maven-parent committer-core importer" ;;
+    collector-http) echo "commons-maven-parent committer-core importer collector-core" ;;
+    collector-filesystem) echo "commons-maven-parent committer-core importer collector-core" ;;
+    committer-googlecloudsearch) echo "commons-maven-parent committer-core importer" ;;
+    committer-elasticsearch) echo "commons-maven-parent committer-core" ;;
+    committer-sql) echo "commons-maven-parent committer-core" ;;
+    *) echo "" ;;
+  esac
+}
+
+depended_by() {
+  case "$1" in
+    commons-maven-parent) echo "committer-core importer collector-core collector-http collector-filesystem committer-googlecloudsearch committer-elasticsearch committer-sql" ;;
+    committer-core) echo "importer collector-core collector-http collector-filesystem committer-googlecloudsearch committer-elasticsearch committer-sql" ;;
+    importer) echo "collector-core collector-http collector-filesystem committer-googlecloudsearch" ;;
+    collector-core) echo "collector-http collector-filesystem" ;;
+    collector-http) echo "" ;;
+    collector-filesystem) echo "" ;;
+    committer-googlecloudsearch) echo "" ;;
+    committer-elasticsearch) echo "" ;;
+    committer-sql) echo "" ;;
+    *) echo "" ;;
+  esac
+}
+
+expand_with_deps() {
+  local selected=("$@")
+  local changed=1
+  while [[ "$changed" -eq 1 ]]; do
+    changed=0
+    local m dep
+    local snapshot=("${selected[@]}")
+    for m in "${snapshot[@]}"; do
+      for dep in $(depends_on "$m"); do
+        if [[ " ${selected[*]} " != *" $dep "* ]]; then
+          selected+=("$dep")
+          changed=1
+        fi
+      done
+      for dep in $(depended_by "$m"); do
+        if [[ " ${selected[*]} " != *" $dep "* ]]; then
+          selected+=("$dep")
+          changed=1
+        fi
+      done
+    done
+  done
+
+  local ordered=()
+  local module
+  for module in "${MODULES[@]}"; do
+    if [[ " ${selected[*]} " == *" $module "* ]]; then
+      ordered+=("$module")
+    fi
+  done
+  printf '%s\n' "${ordered[@]}"
+}
+
 echo
 echo "Change detection summary:"
 for module in "${MODULES[@]}"; do
@@ -186,9 +249,11 @@ if [[ "${#CHANGED_MODULES[@]}" -eq 0 ]]; then
   exit 0
 fi
 
+mapfile -t DEPLOY_MODULES < <(expand_with_deps "${CHANGED_MODULES[@]}")
+
 echo
 echo "Modules selected for deploy (dependency order):"
-printf ' - %s\n' "${CHANGED_MODULES[@]}"
+printf ' - %s\n' "${DEPLOY_MODULES[@]}"
 
 if [[ "$WHAT_IF" -eq 1 ]]; then
   echo
@@ -203,7 +268,7 @@ else
   MVN_FLAGS+=(-DskipTests=false)
 fi
 
-for module in "${CHANGED_MODULES[@]}"; do
+for module in "${DEPLOY_MODULES[@]}"; do
   echo
   echo "[deploy] $module"
   "$MVN_EXE" -f "$WORKSPACE_ROOT/$module/pom.xml" "${MVN_FLAGS[@]}" deploy

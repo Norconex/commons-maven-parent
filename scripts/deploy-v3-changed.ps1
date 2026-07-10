@@ -29,6 +29,71 @@ if ($IncludeSql) {
     $orderedModules += "committer-sql"
 }
 
+$moduleDependencies = @{
+    "commons-maven-parent" = @()
+    "committer-core" = @("commons-maven-parent")
+    "importer" = @("commons-maven-parent", "committer-core")
+    "collector-core" = @("commons-maven-parent", "committer-core", "importer")
+    "collector-http" = @("commons-maven-parent", "committer-core", "importer", "collector-core")
+    "collector-filesystem" = @("commons-maven-parent", "committer-core", "importer", "collector-core")
+    "committer-googlecloudsearch" = @("commons-maven-parent", "committer-core", "importer")
+    "committer-elasticsearch" = @("commons-maven-parent", "committer-core")
+    "committer-sql" = @("commons-maven-parent", "committer-core")
+}
+
+function Expand-ModuleDependencies {
+    param(
+        [string[]]$Modules,
+        [hashtable]$DependencyMap,
+        [string[]]$Order
+    )
+
+    $selected = [System.Collections.Generic.HashSet[string]]::new()
+    $dependents = @{}
+    foreach ($m in $Order) {
+        if (-not $dependents.ContainsKey($m)) {
+            $dependents[$m] = [System.Collections.Generic.List[string]]::new()
+        }
+    }
+    foreach ($m in $DependencyMap.Keys) {
+        foreach ($dep in $DependencyMap[$m]) {
+            if (-not $dependents.ContainsKey($dep)) {
+                $dependents[$dep] = [System.Collections.Generic.List[string]]::new()
+            }
+            $dependents[$dep].Add($m)
+        }
+    }
+
+    function Add-WithDeps {
+        param([string]$Module)
+        if (-not $selected.Add($Module)) {
+            return
+        }
+        foreach ($dep in $DependencyMap[$Module]) {
+            Add-WithDeps -Module $dep
+        }
+    }
+
+    function Add-WithDependents {
+        param([string]$Module)
+        if (-not $selected.Add($Module)) {
+            return
+        }
+        foreach ($dep in $DependencyMap[$Module]) {
+            Add-WithDependents -Module $dep
+        }
+        foreach ($child in $dependents[$Module]) {
+            Add-WithDependents -Module $child
+        }
+    }
+
+    foreach ($m in $Modules) {
+        Add-WithDependents -Module $m
+    }
+
+    return $Order | Where-Object { $selected.Contains($_) }
+}
+
 function Get-PomTextValue {
     param(
         [xml]$Xml,
@@ -195,12 +260,15 @@ Write-Host ""
 Write-Host "Change detection summary:"
 $moduleInfo | Select-Object Module, ArtifactId, LocalVersion, LatestCentralRelease, Changed, Reason | Format-Table -AutoSize
 
-$toDeploy = $moduleInfo | Where-Object { $_.Changed }
-if (-not $toDeploy) {
+$changedModules = @($moduleInfo | Where-Object { $_.Changed } | Select-Object -ExpandProperty Module)
+if (-not $changedModules) {
     Write-Host ""
     Write-Host "No modules detected as changed since latest Central release. Nothing to deploy."
     exit 0
 }
+
+$toDeployNames = Expand-ModuleDependencies -Modules $changedModules -DependencyMap $moduleDependencies -Order $orderedModules
+$toDeploy = $moduleInfo | Where-Object { $toDeployNames -contains $_.Module }
 
 $mvnFlags = @(
     "-Dgpg.skip=true",
@@ -214,7 +282,7 @@ if ($RunTests) {
 
 Write-Host ""
 Write-Host "Modules selected for deploy (dependency order):"
-$toDeploy | Select-Object -ExpandProperty Module | ForEach-Object { Write-Host " - $_" }
+$toDeployNames | ForEach-Object { Write-Host " - $_" }
 
 if ($WhatIf) {
     Write-Host ""
