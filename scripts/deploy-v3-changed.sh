@@ -11,7 +11,9 @@ MVN_EXE="${MVN_EXE:-mvn}"
 RELEASE_REPOS=(
   "https://repo1.maven.org/maven2"
   "https://repo.maven.apache.org/maven2"
-  "https://oss.sonatype.org/content/repositories/releases"
+)
+SNAPSHOT_REPOS=(
+  "https://central.sonatype.com/repository/maven-snapshots"
 )
 
 MODULES=(
@@ -127,6 +129,27 @@ get_latest_release() {
   return 1
 }
 
+# Echoes the last deployed SNAPSHOT's lastUpdated timestamp as Unix epoch
+# seconds (UTC), or nothing if no SNAPSHOT metadata is found.
+get_snapshot_last_updated_epoch() {
+  local group_id="$1"
+  local artifact_id="$2"
+  local group_path="${group_id//./\/}"
+  local repo
+  for repo in "${SNAPSHOT_REPOS[@]}"; do
+    local url="${repo%/}/$group_path/$artifact_id/maven-metadata.xml"
+    local last_updated
+    last_updated="$(curl -fsSL "$url" 2>/dev/null | sed -n 's:.*<lastUpdated>\(.*\)</lastUpdated>.*:\1:p' | head -n1 || true)"
+    if [[ -n "$last_updated" ]]; then
+      local y="${last_updated:0:4}" mo="${last_updated:4:2}" d="${last_updated:6:2}"
+      local h="${last_updated:8:2}" mi="${last_updated:10:2}" s="${last_updated:12:2}"
+      date -u -d "${y}-${mo}-${d} ${h}:${mi}:${s}" +%s
+      return 0
+    fi
+  done
+  return 1
+}
+
 CHANGED_MODULES=()
 
 depends_on() {
@@ -211,8 +234,30 @@ for module in "${MODULES[@]}"; do
   changed=0
   reason=""
   if [[ -z "$latest_release" ]]; then
-    changed=1
-    reason="No release metadata"
+    # No release exists yet under this groupId/artifactId (expected for a
+    # SNAPSHOT-only project). Fall back to comparing local commit history
+    # against the last deployed SNAPSHOT's timestamp instead of
+    # unconditionally treating the module as changed.
+    snapshot_epoch=""
+    if ! snapshot_epoch="$(get_snapshot_last_updated_epoch "$group_id" "$artifact_id")"; then
+      snapshot_epoch=""
+    fi
+    if [[ -z "$snapshot_epoch" ]]; then
+      changed=1
+      reason="No release or snapshot metadata"
+    elif [[ -n "$(git -C "$module_dir" status --porcelain)" ]]; then
+      changed=1
+      reason="Working tree dirty"
+    else
+      last_commit_epoch="$(git -C "$module_dir" log -1 --format=%ct)"
+      if [[ "$last_commit_epoch" -gt "$snapshot_epoch" ]]; then
+        changed=1
+        reason="Changed since last snapshot deploy"
+      else
+        changed=0
+        reason="No changes since last snapshot deploy"
+      fi
+    fi
   else
     if tag="$(resolve_tag "$module_dir" "$artifact_id" "$module" "$latest_release" 2>/dev/null || true)" && [[ -n "$tag" ]]; then
       if git -C "$module_dir" diff --quiet "$tag..HEAD" -- .; then

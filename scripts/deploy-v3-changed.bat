@@ -8,7 +8,8 @@ set "INCLUDE_SQL=0"
 set "SKIP_TESTS=1"
 set "WHAT_IF=0"
 if "%MVN_EXE%"=="" set "MVN_EXE=mvn"
-set "RELEASE_REPOS=https://repo1.maven.org/maven2 https://repo.maven.apache.org/maven2 https://oss.sonatype.org/content/repositories/releases"
+set "RELEASE_REPOS=https://repo1.maven.org/maven2 https://repo.maven.apache.org/maven2"
+set "SNAPSHOT_REPOS=https://central.sonatype.com/repository/maven-snapshots"
 
 set "MODULES=commons-maven-parent committer-core importer collector-core collector-http collector-filesystem committer-googlecloudsearch committer-elasticsearch"
 
@@ -59,12 +60,19 @@ goto usage
 if "%INCLUDE_SQL%"=="1" set "MODULES=%MODULES% committer-sql"
 
 if /i "%MVN_EXE%"=="mvn" (
-  mvn -v >nul 2>nul
-  if errorlevel 1 (
+  rem Resolve to the fully-qualified path (with extension) up front. This is
+  rem required for correctness, not just cleanliness: cmd.exe skips PATHEXT
+  rem extension resolution for quoted command names, so a later
+  rem call "%MVN_EXE%" ... with the bare name "mvn" silently fails to find
+  rem mvn.cmd. A resolved, extension-qualified path is safe to quote.
+  set "MVN_RESOLVED="
+  for /f "usebackq delims=" %%P in (`where mvn 2^>nul`) do if not defined MVN_RESOLVED set "MVN_RESOLVED=%%P"
+  if not defined MVN_RESOLVED (
     echo ERROR: mvn is required but was not found in PATH.
     echo Hint: set MVN_EXE to full path, e.g. C:\apps\apache-maven-3.9.9\bin\mvn.cmd
     exit /b 1
   )
+  set "MVN_EXE=!MVN_RESOLVED!"
 ) else (
   if not exist "%MVN_EXE%" (
     echo ERROR: configured MVN_EXE not found: %MVN_EXE%
@@ -251,7 +259,7 @@ for %%R in (%RELEASE_REPOS%) do (
   set "META_FILE=%TEMP%\deploy-v3-meta-%RANDOM%.xml"
   curl -fsSL "%%R/%GROUP_PATH%/%ARTIFACT_ID%/maven-metadata.xml" -o "!META_FILE!" >nul 2>nul
   if not errorlevel 1 (
-    for /f "tokens=2 delims=<>" %%V in ('findstr /R /C:"<release>.*</release>" "!META_FILE!"') do set "LATEST_RELEASE=%%V"
+    for /f "tokens=3 delims=<>" %%V in ('findstr /R /C:"<release>.*</release>" "!META_FILE!"') do set "LATEST_RELEASE=%%V"
   )
   del "!META_FILE!" >nul 2>nul
   if not "!LATEST_RELEASE!"=="" goto metadata_found
@@ -262,10 +270,50 @@ set "CHANGED=0"
 set "REASON="
 set "TAG="
 
-if "!LATEST_RELEASE!"=="" (
+if not "!LATEST_RELEASE!"=="" goto release_based_detection
+
+rem No release exists yet under this groupId/artifactId (expected for a
+rem SNAPSHOT-only project). Fall back to comparing local commit history
+rem against the last deployed SNAPSHOT's timestamp instead of
+rem unconditionally treating the module as changed.
+set "SNAPSHOT_LASTUPDATED="
+for %%R in (%SNAPSHOT_REPOS%) do (
+  set "SNAP_META_FILE=%TEMP%\deploy-v3-snap-meta-%RANDOM%.xml"
+  curl -fsSL "%%R/%GROUP_PATH%/%ARTIFACT_ID%/maven-metadata.xml" -o "!SNAP_META_FILE!" >nul 2>nul
+  if not errorlevel 1 (
+    for /f "tokens=3 delims=<>" %%V in ('findstr /R /C:"<lastUpdated>.*</lastUpdated>" "!SNAP_META_FILE!"') do set "SNAPSHOT_LASTUPDATED=%%V"
+  )
+  del "!SNAP_META_FILE!" >nul 2>nul
+  if not "!SNAPSHOT_LASTUPDATED!"=="" goto snapshot_metadata_found
+)
+
+:snapshot_metadata_found
+if "!SNAPSHOT_LASTUPDATED!"=="" (
   set "CHANGED=1"
-  set "REASON=No release metadata"
+  set "REASON=No release or snapshot metadata"
 ) else (
+  for /f %%D in ('git -C "%WORKSPACE_ROOT%\%MODULE%" status --porcelain ^| find /c /v ""') do set "DIRTY=%%D"
+  if not "!DIRTY!"=="0" (
+    set "CHANGED=1"
+    set "REASON=Working tree dirty"
+  ) else (
+    for /f "usebackq" %%E in (`git -C "%WORKSPACE_ROOT%\%MODULE%" log -1 --format^=%%ct`) do set "LAST_COMMIT_EPOCH=%%E"
+    set "SNAPSHOT_EPOCH="
+    call :date_to_epoch "!SNAPSHOT_LASTUPDATED!" SNAPSHOT_EPOCH
+    if "!SNAPSHOT_EPOCH!"=="" (
+      set "CHANGED=1"
+      set "REASON=Could not parse snapshot lastUpdated timestamp"
+    ) else if !LAST_COMMIT_EPOCH! GTR !SNAPSHOT_EPOCH! (
+      set "CHANGED=1"
+      set "REASON=Changed since last snapshot deploy"
+    ) else (
+      set "REASON=No changes since last snapshot deploy"
+    )
+  )
+)
+goto detect_done
+
+:release_based_detection
   call :resolve_tag "%WORKSPACE_ROOT%\%MODULE%" "%ARTIFACT_ID%" "%MODULE%" "!LATEST_RELEASE!"
   if not "!TAG!"=="" (
     git -C "%WORKSPACE_ROOT%\%MODULE%" diff --quiet "!TAG!..HEAD" -- .
@@ -290,8 +338,8 @@ if "!LATEST_RELEASE!"=="" (
       )
     )
   )
-)
 
+:detect_done
 if "!CHANGED!"=="1" set "CHANGED_MODULES=%CHANGED_MODULES% %MODULE%"
 if "!CHANGED!"=="1" call :mark_changed "%MODULE%"
 echo %MODULE% ^| %ARTIFACT_ID% ^| %LOCAL_VERSION% ^| !LATEST_RELEASE! ^| !CHANGED! ^| !REASON!
@@ -347,6 +395,44 @@ for %%T in ("v%REL%" "%REL%" "%ART%-%REL%" "%MOD%-%REL%") do (
     exit /b 0
   )
 )
+exit /b 0
+
+rem Converts a yyyyMMddHHmmss UTC timestamp (Maven metadata's <lastUpdated>
+rem format) to Unix epoch seconds, using the days_from_civil algorithm
+rem (Howard Hinnant, public domain). Pure batch arithmetic, no external
+rem process, so it works the same on any Windows machine regardless of
+rem whether PowerShell is available.
+rem %1 = yyyyMMddHHmmss string, %2 = name of variable to receive the result.
+:date_to_epoch
+setlocal EnableDelayedExpansion
+set "DT=%~1"
+if "%DT%"=="" (
+  endlocal
+  set "%~2="
+  exit /b 0
+)
+rem The "1<value> - 10^n" trick avoids batch's octal misinterpretation of
+rem zero-padded numbers (e.g. "08" would otherwise error as an invalid
+rem octal digit).
+set /a "YY=1%DT:~0,4% - 10000"
+set /a "MO=1%DT:~4,2% - 100"
+set /a "DD=1%DT:~6,2% - 100"
+set /a "HH=1%DT:~8,2% - 100"
+set /a "MI=1%DT:~10,2% - 100"
+set /a "SS=1%DT:~12,2% - 100"
+if !MO! LEQ 2 (
+  set /a "YY=YY-1"
+  set /a "MADJ=MO+9"
+) else (
+  set /a "MADJ=MO-3"
+)
+set /a "ERA=YY/400"
+set /a "YOE=YY-ERA*400"
+set /a "DOY=(153*MADJ+2)/5+DD-1"
+set /a "DOE=YOE*365+YOE/4-YOE/100+DOY"
+set /a "DAYS=ERA*146097+DOE-719468"
+set /a "EPOCH=DAYS*86400+HH*3600+MI*60+SS"
+endlocal & set "%~2=%EPOCH%"
 exit /b 0
 
 :usage

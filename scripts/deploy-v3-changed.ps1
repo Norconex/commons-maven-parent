@@ -5,8 +5,10 @@ param(
     [string]$MvnExe = "mvn",
     [string[]]$ReleaseRepos = @(
         "https://repo1.maven.org/maven2",
-        "https://repo.maven.apache.org/maven2",
-        "https://oss.sonatype.org/content/repositories/releases"
+        "https://repo.maven.apache.org/maven2"
+    ),
+    [string[]]$SnapshotRepos = @(
+        "https://central.sonatype.com/repository/maven-snapshots"
     )
 )
 
@@ -160,6 +162,44 @@ function Get-LatestCentralRelease {
     return $null
 }
 
+function Get-SnapshotLastUpdated {
+    param(
+        [string]$GroupId,
+        [string]$ArtifactId
+    )
+
+    $groupPath = $GroupId -replace "\.", "/"
+    foreach ($repo in $SnapshotRepos) {
+        $repoBase = $repo.TrimEnd('/')
+        $metadataUrl = "$repoBase/$groupPath/$ArtifactId/maven-metadata.xml"
+        try {
+            [xml]$metadata = Invoke-RestMethod -Uri $metadataUrl -TimeoutSec 20
+            $lastUpdated = $metadata.metadata.versioning.lastUpdated
+            if (-not [string]::IsNullOrWhiteSpace($lastUpdated)) {
+                # Maven metadata timestamps are always UTC, format yyyyMMddHHmmss.
+                return [DateTime]::ParseExact(
+                    $lastUpdated.Trim(), "yyyyMMddHHmmss",
+                    [System.Globalization.CultureInfo]::InvariantCulture,
+                    [System.Globalization.DateTimeStyles]::AssumeUniversal -bor
+                        [System.Globalization.DateTimeStyles]::AdjustToUniversal)
+            }
+        } catch {
+            Write-Verbose "Snapshot metadata lookup failed for $GroupId`:$ArtifactId at $metadataUrl"
+        }
+    }
+    return $null
+}
+
+function Get-LastCommitUtc {
+    param([string]$RepoPath)
+
+    $raw = (& git -C $RepoPath log -1 --format=%cI | Out-String).Trim()
+    if ([string]::IsNullOrWhiteSpace($raw)) {
+        return $null
+    }
+    return [DateTimeOffset]::Parse($raw).UtcDateTime
+}
+
 function Resolve-ReleaseTag {
     param(
         [string]$RepoPath,
@@ -221,8 +261,29 @@ foreach ($module in $orderedModules) {
     $tag = $null
 
     if ($null -eq $latestRelease) {
-        $changed = $true
-        $reason = "No Central release metadata"
+        # No release exists yet under this groupId/artifactId (expected for
+        # a SNAPSHOT-only project). Fall back to comparing local commit
+        # history against the last deployed SNAPSHOT's timestamp instead of
+        # unconditionally treating the module as changed.
+        $snapshotLastUpdated = Get-SnapshotLastUpdated -GroupId $proj.GroupId -ArtifactId $proj.ArtifactId
+        if ($null -eq $snapshotLastUpdated) {
+            $changed = $true
+            $reason = "No release or snapshot metadata"
+        } else {
+            $lastCommitUtc = Get-LastCommitUtc -RepoPath $modulePath
+            $statusOutput = (& git -C $modulePath status --porcelain | Out-String).Trim()
+            $dirty = ($LASTEXITCODE -eq 0) -and -not [string]::IsNullOrWhiteSpace($statusOutput)
+            if ($dirty) {
+                $changed = $true
+                $reason = "Working tree dirty"
+            } elseif ($null -ne $lastCommitUtc -and $lastCommitUtc -gt $snapshotLastUpdated) {
+                $changed = $true
+                $reason = "Changed since last snapshot deploy ($($snapshotLastUpdated.ToString('u')))"
+            } else {
+                $changed = $false
+                $reason = "No changes since last snapshot deploy ($($snapshotLastUpdated.ToString('u')))"
+            }
+        }
     } else {
         $tag = Resolve-ReleaseTag -RepoPath $modulePath -Module $module -ArtifactId $proj.ArtifactId -ReleaseVersion $latestRelease
         if ($null -ne $tag) {
