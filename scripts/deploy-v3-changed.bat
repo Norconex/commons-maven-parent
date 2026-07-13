@@ -4,22 +4,16 @@ setlocal EnableExtensions EnableDelayedExpansion
 set "SCRIPT_DIR=%~dp0"
 for %%I in ("%SCRIPT_DIR%..\..") do set "WORKSPACE_ROOT=%%~fI"
 
-set "INCLUDE_SQL=0"
 set "SKIP_TESTS=1"
 set "WHAT_IF=0"
 if "%MVN_EXE%"=="" set "MVN_EXE=mvn"
 set "RELEASE_REPOS=https://repo1.maven.org/maven2 https://repo.maven.apache.org/maven2"
 set "SNAPSHOT_REPOS=https://central.sonatype.com/repository/maven-snapshots"
 
-set "MODULES=commons-maven-parent committer-core importer collector-core collector-http collector-filesystem committer-googlecloudsearch committer-elasticsearch"
+set "MODULES=commons-maven-parent committer-core importer collector-core collector-http collector-filesystem committer-googlecloudsearch committer-elasticsearch committer-cloudsearch committer-solr committer-idol committer-azuresearch committer-neo4j committer-sql"
 
 :parse_args
 if "%~1"=="" goto args_done
-if /I "%~1"=="--include-sql" (
-  set "INCLUDE_SQL=1"
-  shift
-  goto parse_args
-)
 if /I "%~1"=="--run-tests" (
   set "SKIP_TESTS=0"
   shift
@@ -57,8 +51,6 @@ echo ERROR: Unknown option: %~1
 goto usage
 
 :args_done
-if "%INCLUDE_SQL%"=="1" set "MODULES=%MODULES% committer-sql"
-
 if /i "%MVN_EXE%"=="mvn" (
   rem Resolve to the fully-qualified path (with extension) up front. This is
   rem required for correctness, not just cleanliness: cmd.exe skips PATHEXT
@@ -101,6 +93,11 @@ set "CHANGED_COLLECTOR_HTTP=0"
 set "CHANGED_COLLECTOR_FILESYSTEM=0"
 set "CHANGED_COMMITTER_GOOGLECLOUDSEARCH=0"
 set "CHANGED_COMMITTER_ELASTICSEARCH=0"
+set "CHANGED_COMMITTER_CLOUDSEARCH=0"
+set "CHANGED_COMMITTER_SOLR=0"
+set "CHANGED_COMMITTER_IDOL=0"
+set "CHANGED_COMMITTER_AZURESEARCH=0"
+set "CHANGED_COMMITTER_NEO4J=0"
 set "CHANGED_COMMITTER_SQL=0"
 set "SUMMARY_FILE=%TEMP%\deploy-v3-changed-summary-%RANDOM%.txt"
 del "%SUMMARY_FILE%" >nul 2>nul
@@ -143,6 +140,26 @@ if "%CHANGED_COMMITTER_ELASTICSEARCH%"=="1" (
   set "CHANGED_COMMITTER_CORE=1"
   set "CHANGED_COMMONS_MAVEN_PARENT=1"
 )
+if "%CHANGED_COMMITTER_CLOUDSEARCH%"=="1" (
+  set "CHANGED_COMMITTER_CORE=1"
+  set "CHANGED_COMMONS_MAVEN_PARENT=1"
+)
+if "%CHANGED_COMMITTER_SOLR%"=="1" (
+  set "CHANGED_COMMITTER_CORE=1"
+  set "CHANGED_COMMONS_MAVEN_PARENT=1"
+)
+if "%CHANGED_COMMITTER_IDOL%"=="1" (
+  set "CHANGED_COMMITTER_CORE=1"
+  set "CHANGED_COMMONS_MAVEN_PARENT=1"
+)
+if "%CHANGED_COMMITTER_AZURESEARCH%"=="1" (
+  set "CHANGED_COMMITTER_CORE=1"
+  set "CHANGED_COMMONS_MAVEN_PARENT=1"
+)
+if "%CHANGED_COMMITTER_NEO4J%"=="1" (
+  set "CHANGED_COMMITTER_CORE=1"
+  set "CHANGED_COMMONS_MAVEN_PARENT=1"
+)
 if "%CHANGED_COMMITTER_SQL%"=="1" (
   set "CHANGED_COMMITTER_CORE=1"
   set "CHANGED_COMMONS_MAVEN_PARENT=1"
@@ -157,7 +174,12 @@ if "%CHANGED_COMMONS_MAVEN_PARENT%"=="1" (
   set "CHANGED_COLLECTOR_FILESYSTEM=1"
   set "CHANGED_COMMITTER_GOOGLECLOUDSEARCH=1"
   set "CHANGED_COMMITTER_ELASTICSEARCH=1"
-  if "%INCLUDE_SQL%"=="1" set "CHANGED_COMMITTER_SQL=1"
+  set "CHANGED_COMMITTER_CLOUDSEARCH=1"
+  set "CHANGED_COMMITTER_SOLR=1"
+  set "CHANGED_COMMITTER_IDOL=1"
+  set "CHANGED_COMMITTER_AZURESEARCH=1"
+  set "CHANGED_COMMITTER_NEO4J=1"
+  set "CHANGED_COMMITTER_SQL=1"
 )
 if "%CHANGED_COMMITTER_CORE%"=="1" (
   set "CHANGED_IMPORTER=1"
@@ -166,7 +188,12 @@ if "%CHANGED_COMMITTER_CORE%"=="1" (
   set "CHANGED_COLLECTOR_FILESYSTEM=1"
   set "CHANGED_COMMITTER_GOOGLECLOUDSEARCH=1"
   set "CHANGED_COMMITTER_ELASTICSEARCH=1"
-  if "%INCLUDE_SQL%"=="1" set "CHANGED_COMMITTER_SQL=1"
+  set "CHANGED_COMMITTER_CLOUDSEARCH=1"
+  set "CHANGED_COMMITTER_SOLR=1"
+  set "CHANGED_COMMITTER_IDOL=1"
+  set "CHANGED_COMMITTER_AZURESEARCH=1"
+  set "CHANGED_COMMITTER_NEO4J=1"
+  set "CHANGED_COMMITTER_SQL=1"
 )
 if "%CHANGED_IMPORTER%"=="1" (
   set "CHANGED_COLLECTOR_CORE=1"
@@ -189,6 +216,11 @@ for %%M in (%MODULES%) do (
   if /I "%%M"=="collector-filesystem" if "%CHANGED_COLLECTOR_FILESYSTEM%"=="1" set "CHANGED_MODULES=!CHANGED_MODULES! %%M"
   if /I "%%M"=="committer-googlecloudsearch" if "%CHANGED_COMMITTER_GOOGLECLOUDSEARCH%"=="1" set "CHANGED_MODULES=!CHANGED_MODULES! %%M"
   if /I "%%M"=="committer-elasticsearch" if "%CHANGED_COMMITTER_ELASTICSEARCH%"=="1" set "CHANGED_MODULES=!CHANGED_MODULES! %%M"
+  if /I "%%M"=="committer-cloudsearch" if "%CHANGED_COMMITTER_CLOUDSEARCH%"=="1" set "CHANGED_MODULES=!CHANGED_MODULES! %%M"
+  if /I "%%M"=="committer-solr" if "%CHANGED_COMMITTER_SOLR%"=="1" set "CHANGED_MODULES=!CHANGED_MODULES! %%M"
+  if /I "%%M"=="committer-idol" if "%CHANGED_COMMITTER_IDOL%"=="1" set "CHANGED_MODULES=!CHANGED_MODULES! %%M"
+  if /I "%%M"=="committer-azuresearch" if "%CHANGED_COMMITTER_AZURESEARCH%"=="1" set "CHANGED_MODULES=!CHANGED_MODULES! %%M"
+  if /I "%%M"=="committer-neo4j" if "%CHANGED_COMMITTER_NEO4J%"=="1" set "CHANGED_MODULES=!CHANGED_MODULES! %%M"
   if /I "%%M"=="committer-sql" if "%CHANGED_COMMITTER_SQL%"=="1" set "CHANGED_MODULES=!CHANGED_MODULES! %%M"
 )
 
@@ -355,6 +387,11 @@ if /I "%M%"=="collector-http" set "CHANGED_COLLECTOR_HTTP=1"
 if /I "%M%"=="collector-filesystem" set "CHANGED_COLLECTOR_FILESYSTEM=1"
 if /I "%M%"=="committer-googlecloudsearch" set "CHANGED_COMMITTER_GOOGLECLOUDSEARCH=1"
 if /I "%M%"=="committer-elasticsearch" set "CHANGED_COMMITTER_ELASTICSEARCH=1"
+if /I "%M%"=="committer-cloudsearch" set "CHANGED_COMMITTER_CLOUDSEARCH=1"
+if /I "%M%"=="committer-solr" set "CHANGED_COMMITTER_SOLR=1"
+if /I "%M%"=="committer-idol" set "CHANGED_COMMITTER_IDOL=1"
+if /I "%M%"=="committer-azuresearch" set "CHANGED_COMMITTER_AZURESEARCH=1"
+if /I "%M%"=="committer-neo4j" set "CHANGED_COMMITTER_NEO4J=1"
 if /I "%M%"=="committer-sql" set "CHANGED_COMMITTER_SQL=1"
 exit /b 0
 
@@ -439,7 +476,6 @@ exit /b 0
 echo Usage: deploy-v3-changed.bat [options]
 echo.
 echo Options:
-echo   --include-sql          Include committer-sql in change detection/deploy.
 echo   --run-tests            Run tests during deploy ^(default skips tests^).
 echo   --what-if              Show what would be deployed without deploying.
 echo   --mvn-exe ^<path^>      Maven executable path.

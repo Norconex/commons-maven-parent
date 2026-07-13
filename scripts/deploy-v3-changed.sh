@@ -4,7 +4,6 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 WORKSPACE_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
 
-INCLUDE_SQL=0
 SKIP_TESTS=1
 WHAT_IF=0
 MVN_EXE="${MVN_EXE:-mvn}"
@@ -25,6 +24,12 @@ MODULES=(
   "collector-filesystem"
   "committer-googlecloudsearch"
   "committer-elasticsearch"
+  "committer-cloudsearch"
+  "committer-solr"
+  "committer-idol"
+  "committer-azuresearch"
+  "committer-neo4j"
+  "committer-sql"
 )
 
 usage() {
@@ -32,7 +37,6 @@ usage() {
 Usage: deploy-v3-changed.sh [options]
 
 Options:
-  --include-sql            Include committer-sql in change detection/deploy.
   --run-tests              Run tests during deploy (default skips tests).
   --what-if                Show what would be deployed without deploying.
   --mvn-exe <path>         Maven executable path.
@@ -43,10 +47,6 @@ EOF
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --include-sql)
-      INCLUDE_SQL=1
-      shift
-      ;;
     --run-tests)
       SKIP_TESTS=0
       shift
@@ -80,10 +80,6 @@ done
 command -v "$MVN_EXE" >/dev/null 2>&1 || { echo "ERROR: Maven executable not found: $MVN_EXE"; exit 1; }
 command -v git >/dev/null 2>&1 || { echo "ERROR: git is required but was not found in PATH."; exit 1; }
 command -v curl >/dev/null 2>&1 || { echo "ERROR: curl is required but was not found in PATH."; exit 1; }
-
-if [[ "$INCLUDE_SQL" -eq 1 ]]; then
-  MODULES+=("committer-sql")
-fi
 
 resolve_tag() {
   local repo_path="$1"
@@ -162,6 +158,11 @@ depends_on() {
     collector-filesystem) echo "commons-maven-parent committer-core importer collector-core" ;;
     committer-googlecloudsearch) echo "commons-maven-parent committer-core importer" ;;
     committer-elasticsearch) echo "commons-maven-parent committer-core" ;;
+    committer-cloudsearch) echo "commons-maven-parent committer-core" ;;
+    committer-solr) echo "commons-maven-parent committer-core" ;;
+    committer-idol) echo "commons-maven-parent committer-core" ;;
+    committer-azuresearch) echo "commons-maven-parent committer-core" ;;
+    committer-neo4j) echo "commons-maven-parent committer-core" ;;
     committer-sql) echo "commons-maven-parent committer-core" ;;
     *) echo "" ;;
   esac
@@ -169,8 +170,8 @@ depends_on() {
 
 depended_by() {
   case "$1" in
-    commons-maven-parent) echo "committer-core importer collector-core collector-http collector-filesystem committer-googlecloudsearch committer-elasticsearch committer-sql" ;;
-    committer-core) echo "importer collector-core collector-http collector-filesystem committer-googlecloudsearch committer-elasticsearch committer-sql" ;;
+    commons-maven-parent) echo "committer-core importer collector-core collector-http collector-filesystem committer-googlecloudsearch committer-elasticsearch committer-cloudsearch committer-solr committer-idol committer-azuresearch committer-neo4j committer-sql" ;;
+    committer-core) echo "importer collector-core collector-http collector-filesystem committer-googlecloudsearch committer-elasticsearch committer-cloudsearch committer-solr committer-idol committer-azuresearch committer-neo4j committer-sql" ;;
     importer) echo "collector-core collector-http collector-filesystem committer-googlecloudsearch" ;;
     collector-core) echo "collector-http collector-filesystem" ;;
     collector-http) echo "" ;;

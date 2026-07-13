@@ -1,5 +1,4 @@
 param(
-    [switch]$IncludeSql,
     [switch]$RunTests,
     [switch]$WhatIf,
     [string]$MvnExe = "mvn",
@@ -25,11 +24,14 @@ $orderedModules = @(
     "collector-http",
     "collector-filesystem",
     "committer-googlecloudsearch",
-    "committer-elasticsearch"
+    "committer-elasticsearch",
+    "committer-cloudsearch",
+    "committer-solr",
+    "committer-idol",
+    "committer-azuresearch",
+    "committer-neo4j",
+    "committer-sql"
 )
-if ($IncludeSql) {
-    $orderedModules += "committer-sql"
-}
 
 $moduleDependencies = @{
     "commons-maven-parent" = @()
@@ -40,6 +42,11 @@ $moduleDependencies = @{
     "collector-filesystem" = @("commons-maven-parent", "committer-core", "importer", "collector-core")
     "committer-googlecloudsearch" = @("commons-maven-parent", "committer-core", "importer")
     "committer-elasticsearch" = @("commons-maven-parent", "committer-core")
+    "committer-cloudsearch" = @("commons-maven-parent", "committer-core")
+    "committer-solr" = @("commons-maven-parent", "committer-core")
+    "committer-idol" = @("commons-maven-parent", "committer-core")
+    "committer-azuresearch" = @("commons-maven-parent", "committer-core")
+    "committer-neo4j" = @("commons-maven-parent", "committer-core")
     "committer-sql" = @("commons-maven-parent", "committer-core")
 }
 

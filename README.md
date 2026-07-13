@@ -38,12 +38,12 @@ This repository now includes helper scripts under `scripts/` to support a
 - `scripts/deploy-v3-changed.bat`
   - Native Windows batch implementation.
   - Detects changed modules and deploys in dependency order.
-  - Supports `--include-sql`, `--run-tests`, and `--what-if`.
+  - Supports `--run-tests` and `--what-if`.
 
 - `scripts/deploy-v3-changed.sh`
   - Native Unix/macOS shell implementation.
   - Detects changed modules and deploys in dependency order.
-  - Supports `--include-sql`, `--run-tests`, and `--what-if`.
+  - Supports `--run-tests` and `--what-if`.
 
 - `scripts/commit-push-v3.sh` and `scripts/commit-push-v3.bat`
   - Commits and pushes all dirty sibling repositories listed in
@@ -77,12 +77,12 @@ scripts\commit-push-v3.bat --message "Align v3 snapshot release metadata" --yes
 powershell -ExecutionPolicy Bypass -File scripts\deploy-v3-changed.ps1 -WhatIf
 powershell -ExecutionPolicy Bypass -File scripts\deploy-v3-changed.ps1
 scripts\deploy-v3-changed.bat --what-if
-scripts\deploy-v3-changed.bat --include-sql --mvn-exe C:\apps\apache-maven-3.9.9\bin\mvn.cmd
+scripts\deploy-v3-changed.bat --mvn-exe C:\apps\apache-maven-3.9.9\bin\mvn.cmd
 ```
 
 Unix/macOS wrappers:
 
 ```bash
 ./scripts/deploy-v3-changed.sh --what-if
-./scripts/deploy-v3-changed.sh --include-sql --mvn-exe /opt/apache-maven-3.9.9/bin/mvn
+./scripts/deploy-v3-changed.sh --mvn-exe /opt/apache-maven-3.9.9/bin/mvn
 ```
