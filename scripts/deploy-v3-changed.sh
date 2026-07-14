@@ -148,26 +148,6 @@ get_snapshot_last_updated_epoch() {
 
 CHANGED_MODULES=()
 
-depends_on() {
-  case "$1" in
-    commons-maven-parent) echo "" ;;
-    committer-core) echo "commons-maven-parent" ;;
-    importer) echo "commons-maven-parent committer-core" ;;
-    collector-core) echo "commons-maven-parent committer-core importer" ;;
-    collector-http) echo "commons-maven-parent committer-core importer collector-core" ;;
-    collector-filesystem) echo "commons-maven-parent committer-core importer collector-core" ;;
-    committer-googlecloudsearch) echo "commons-maven-parent committer-core importer" ;;
-    committer-elasticsearch) echo "commons-maven-parent committer-core" ;;
-    committer-cloudsearch) echo "commons-maven-parent committer-core" ;;
-    committer-solr) echo "commons-maven-parent committer-core" ;;
-    committer-idol) echo "commons-maven-parent committer-core" ;;
-    committer-azuresearch) echo "commons-maven-parent committer-core" ;;
-    committer-neo4j) echo "commons-maven-parent committer-core" ;;
-    committer-sql) echo "commons-maven-parent committer-core" ;;
-    *) echo "" ;;
-  esac
-}
-
 depended_by() {
   case "$1" in
     commons-maven-parent) echo "committer-core importer collector-core collector-http collector-filesystem committer-googlecloudsearch committer-elasticsearch committer-cloudsearch committer-solr committer-idol committer-azuresearch committer-neo4j committer-sql" ;;
@@ -191,12 +171,6 @@ expand_with_deps() {
     local m dep
     local snapshot=("${selected[@]}")
     for m in "${snapshot[@]}"; do
-      for dep in $(depends_on "$m"); do
-        if [[ " ${selected[*]} " != *" $dep "* ]]; then
-          selected+=("$dep")
-          changed=1
-        fi
-      done
       for dep in $(depended_by "$m"); do
         if [[ " ${selected[*]} " != *" $dep "* ]]; then
           selected+=("$dep")

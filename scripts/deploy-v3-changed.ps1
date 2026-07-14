@@ -73,23 +73,10 @@ function Expand-ModuleDependencies {
         }
     }
 
-    function Add-WithDeps {
-        param([string]$Module)
-        if (-not $selected.Add($Module)) {
-            return
-        }
-        foreach ($dep in $DependencyMap[$Module]) {
-            Add-WithDeps -Module $dep
-        }
-    }
-
     function Add-WithDependents {
         param([string]$Module)
         if (-not $selected.Add($Module)) {
             return
-        }
-        foreach ($dep in $DependencyMap[$Module]) {
-            Add-WithDependents -Module $dep
         }
         foreach ($child in $dependents[$Module]) {
             Add-WithDependents -Module $child
